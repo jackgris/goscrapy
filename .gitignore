@@ -4,6 +4,14 @@
 *.dll
 *.so
 *.dylib
+*.go~
+*.mod~
+*.el-errors
+*.el
+*.go#
+*.#*
+*.env
+goscrapy
 
 # Test binary, built with `go test -c`
 *.test
