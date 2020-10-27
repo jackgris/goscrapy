@@ -13,6 +13,12 @@
 *.env
 goscrapy
 
+# Database test
+MANIFEST
+KEYREGISTRY
+*.vlog
+*.sst
+
 # Test binary, built with `go test -c`
 *.test
 
