@@ -11,6 +11,7 @@
 *.go#
 *.#*
 *.env
+*.env~
 goscrapy
 
 # Database test
