@@ -4,7 +4,7 @@ import (
 	"github.com/jackgris/goscrapy/wholesalers"
 )
 
-func main(){
+func main() {
 
 	GetConfig()
 	wholesalers.GetData(
