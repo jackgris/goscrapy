@@ -1,22 +1,19 @@
 package wholesalers
 
 import (
-	"context"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
+	"github.com/jackgris/goscrapy/database"
 
 	"encoding/json"
 	"fmt"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"strconv"
 	"strings"
 	"time"
 )
 
+// This struct will be use for match data
 type Product struct {
 	MainEntity  MainEntity `json:"mainEntityOfPage"`
 	Name        string     `json:"name"`
@@ -46,41 +43,21 @@ type Wholesalers struct {
 	Searchpage string
 }
 
-func GetData(dburi, dbuser, dbpass string, w Wholesalers) {
-
-	// Get database connection
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	option := options.Client().ApplyURI(dburi)
-	credentials := options.Credential{Username: dbuser, Password: dbpass}
-	option.SetAuth(credentials)
-
-	client, err := mongo.Connect(ctx, option)
-
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-
-	if err = client.Ping(ctx, readpref.Primary()); err != nil {
-		log.Fatal("Can't find database: " + err.Error())
-	}
-
-	collection := client.Database("mayorista").Collection("productos")
+/* With this function we will get data from the web of wholesalers, and save that
+information on the database */
+func GetData(db database.Database, w Wholesalers) {
 
 	// Starting data collector
 	c := colly.NewCollector()
-	c.Limit(&colly.LimitRule{Delay: 5 * time.Second})
-
+	err := c.Limit(&colly.LimitRule{Delay: 5 * time.Second})
+	if err != nil {fmt.Println("Getdata: ", err)}
 	// With this we know when is the last page of catalog
 	end := false
 
 	// Authenticate
 	err = c.Post(w.Login, map[string]string{"username": w.User, "password": w.Pass})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Get Data authenticate: ", err)
 	}
 
 	// Attach callbacks after login
@@ -112,12 +89,25 @@ func GetData(dburi, dbuser, dbpass string, w Wholesalers) {
 
 			// Create json struct
 			p := Product{}
-			json.Unmarshal([]byte(el.Text()), &p)
+			_ = json.Unmarshal([]byte(el.Text()), &p)
 
 			// Is data is ok, saving product on database
 			if p.MainEntity.Id != "" {
 				// saving data here
-				saveData(collection, ctx, p)
+				//saveData(collection, ctx, p)
+				product := database.Product{
+					Id: p.MainEntity.Id,
+					Name: p.Name,
+					Image: p.Image,
+					Description: p.Description,
+					Price: p.Offers.Price,
+					Stock: p.Offers.InventoryLevel.Stock,
+					Wholesaler: "acabajo",
+				}
+				err := db.Create(product)
+				if err != nil {
+					fmt.Println("Can´t save product: ", err)
+				}
 			}
 		})
 	})
@@ -137,30 +127,11 @@ func GetData(dburi, dbuser, dbpass string, w Wholesalers) {
 		num := strconv.Itoa(i)
 		URL := w.Searchpage + num
 
-		c.Visit(URL)
+		err := c.Visit(URL)
+		if err != nil {
+			fmt.Println("Error visiting site: ", err)
+		}
 	}
 
 	fmt.Println(c.String())
-}
-
-// Save a product on database
-func saveData(collection *mongo.Collection, ctx context.Context, p Product) {
-
-	_, err := collection.InsertOne(ctx, p)
-	if err != nil {
-		log.Fatal("Error inserting json: ", err.Error())
-	}
-
-}
-
-// FIXME Take all products from database
-func GetAll(db string) ([]Product, error) {
-	log.Fatal("Not Implemented getdata wholersaler")
-	return []Product{}, nil
-}
-
-// FIXME NOT IMPLEMENTED Take only one product by ID
-func GetById(db, id string) (Product, error) {
-	log.Fatal("Not implemented getdatabyId wholersaler")
-	return Product{}, nil
 }
