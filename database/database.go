@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+// Interface useful for mocking test, or if need change database
 type Database interface {
 	Create(p Product) error
 	ReadById(p Product) []Product
@@ -18,6 +20,7 @@ type Database interface {
 	Delete(p Product) error
 }
 
+// Data product needed, not mather what wholesaler get data
 type Product struct {
 	Id          string
 	Name        string
@@ -28,25 +31,30 @@ type Product struct {
 	Wholesaler  string
 }
 
+// My database struct
 type MongoDb struct {
 	client *mongo.Client
 	ctx    context.Context
+	cancel context.CancelFunc
 }
 
+// vars needed for only created one instance for my access to the database
 var (
 	once sync.Once
 	db   *MongoDb
 )
 
-func Connect(dburi, dbuser, dbpass string, c context.Context) (*MongoDb, error) {
+// Connecting to the database, only one instance will be create, to connect with mongo database, we need
+// the URI where are the DB, the user name and password, and will return the instance with an active connection
+// or an error
+func Connect(dburi, dbuser, dbpass string) (*MongoDb, error) {
 
 	var err error
 	once.Do(func() {
 		db = new(MongoDb)
-		// FIXME should use context with timeout
-		//ctx, cancel := context.WithTimeout(c, 10*time.Second)
-		//defer cancel()
-		db.ctx = c
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		db.cancel = cancel
+		db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
 		credentials := options.Credential{Username: dbuser, Password: dbpass}
 		option.SetAuth(credentials)
@@ -61,18 +69,21 @@ func Connect(dburi, dbuser, dbpass string, c context.Context) (*MongoDb, error) 
 	return db, err
 }
 
+// Closing the database connection, correctly
 func Disconnect() {
 	fmt.Println("Disconnecting from database")
+	defer db.cancel()
 	if err := db.client.Disconnect(db.ctx); err != nil {
 		panic("Error trying close connection db: " + err.Error())
 	}
 }
 
+// Inserting product in the database, only when is a new product or when price change,
+// is can't do this, return error
 func (db *MongoDb) Create(p Product) error {
 
 	collection := db.client.Database("mayorista").Collection("productos")
 	products := db.ReadById(p)
-	// FIXME Should delete this print when test the function
 	var err error
 	if len(products) > 0 {
 		if products[len(products)-1].Price != p.Price {
@@ -84,6 +95,7 @@ func (db *MongoDb) Create(p Product) error {
 	return err
 }
 
+// Reading from database, a product identified with his ID
 func (m *MongoDb) ReadById(p Product) []Product {
 
 	products := []Product{}
@@ -111,6 +123,7 @@ func (m *MongoDb) ReadById(p Product) []Product {
 	return products
 }
 
+// Reading from database and returning all products from one wholesaler
 func (m *MongoDb) ReadByWholesalers(name string) []Product {
 
 	products := []Product{}
@@ -138,6 +151,7 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 	return products
 }
 
+// Delete a product from DB, if can't do this, return an error. And will print when not found matchs
 func (m *MongoDb) Delete(p Product) error {
 
 	collection := db.client.Database("mayorista").Collection("productos")

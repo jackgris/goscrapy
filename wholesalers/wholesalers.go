@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// This struct will be use for match data
+// This struct will be use for match JSON data
 type Product struct {
 	MainEntity  MainEntity `json:"mainEntityOfPage"`
 	Name        string     `json:"name"`
@@ -50,7 +50,9 @@ func GetData(db database.Database, w Wholesalers) {
 	// Starting data collector
 	c := colly.NewCollector()
 	err := c.Limit(&colly.LimitRule{Delay: 5 * time.Second})
-	if err != nil {fmt.Println("Getdata: ", err)}
+	if err != nil {
+		fmt.Println("Getdata: ", err)
+	}
 	// With this we know when is the last page of catalog
 	end := false
 
@@ -96,13 +98,13 @@ func GetData(db database.Database, w Wholesalers) {
 				// saving data here
 				//saveData(collection, ctx, p)
 				product := database.Product{
-					Id: p.MainEntity.Id,
-					Name: p.Name,
-					Image: p.Image,
+					Id:          p.MainEntity.Id,
+					Name:        p.Name,
+					Image:       p.Image,
 					Description: p.Description,
-					Price: p.Offers.Price,
-					Stock: p.Offers.InventoryLevel.Stock,
-					Wholesaler: "acabajo",
+					Price:       p.Offers.Price,
+					Stock:       p.Offers.InventoryLevel.Stock,
+					Wholesaler:  "acabajo", // FIXME this data, will not be in code
 				}
 				err := db.Create(product)
 				if err != nil {
@@ -116,7 +118,7 @@ func GetData(db database.Database, w Wholesalers) {
 		log.Println("OnRequest")
 	})
 
-	// FIXME Start scraping FIXME change numbers, this's only for tests
+	// FIXME Start scraping change numbers, this's only for tests
 	for i := 63; i < 1000; i++ {
 		// Check when there are no products
 		if end {

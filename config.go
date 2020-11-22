@@ -18,6 +18,7 @@ var (
 	dbpass     string
 )
 
+// Will get all data needed for login on database and web pages
 func GetConfig() {
 
 	// Getting config data
@@ -35,9 +36,11 @@ func GetConfig() {
 	dbpass = os.Getenv("DBPASS")
 }
 
-// This function will get data from the server
+// This function will return a wholesaler with all data needed for login, and web navigation
+// We need this for extracting and saving data from his web server
 func GetWholesalersData() wholesalers.Wholesalers {
 
+	// FIXME need a more elegant and better solution for this
 	w := wholesalers.Wholesalers{}
 	w.Login = login
 	w.User = user
