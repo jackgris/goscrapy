@@ -3,14 +3,23 @@ module github.com/jackgris/goscrapy
 go 1.15
 
 require (
-	github.com/PuerkitoBio/goquery v1.5.1
+	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/antchfx/htmlquery v1.2.6 // indirect
+	github.com/antchfx/xmlquery v1.3.14 // indirect
 	github.com/gocolly/colly/v2 v2.1.0
-	github.com/joho/godotenv v1.3.0
-	github.com/onsi/ginkgo v1.14.2
-	github.com/onsi/gomega v1.10.3
-	go.mongodb.org/mongo-driver v1.4.2
-	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
+	github.com/joho/godotenv v1.4.0
+	github.com/klauspost/compress v1.15.15 // indirect
+	github.com/montanaflynn/stats v0.7.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.7.0
+	github.com/onsi/gomega v1.24.1
+	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
+	github.com/temoto/robotstxt v1.1.2 // indirect
+	github.com/xdg-go/scram v1.1.2 // indirect
+	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
+	go.mongodb.org/mongo-driver v1.11.1
+	golang.org/x/crypto v0.5.0 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )
