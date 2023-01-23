@@ -1,0 +1,14 @@
+#+TITLE: GoScrapy: planning next tasks and features for this project
+#+AUTHOR: Gabriel Pozo
+
+* Database
+** create a docker container with the database
+*** TODO up a mongo database with docker
+
+* API
+** Create endpoints for:
+*** TODO save wholesalers data
+*** TODO save products with price info and wholesaler
+*** TODO get all products
+*** TODO update products, save new price and date
+*** TODO get all prices changes through time

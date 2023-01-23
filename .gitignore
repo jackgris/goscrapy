@@ -12,8 +12,6 @@
 *.#*
 *.env
 *.env~
-*.org
-*.org~
 goscrapy
 
 # Database test
