@@ -12,3 +12,16 @@
 *** TODO get all products
 *** TODO update products, save new price and date
 *** TODO get all prices changes through time
+
+* Consume info
+** create front-ends (we will use React only with the propose of test somethings)
+*** for administration
+**** TODO create users
+**** TODO update or add wholesaler
+**** TODO add sales
+
+*** consulting data
+**** TODO see all products and prices
+**** TODO compare prices of same product at different periods of time
+**** TODO make petition to update data products
+**** TODO show percentage of change prices (selecting one data and compare with the actual price)
