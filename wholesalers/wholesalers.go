@@ -43,8 +43,11 @@ type Wholesalers struct {
 	Searchpage string
 }
 
-/* With this function we will get data from the web of wholesalers, and save that
-information on the database */
+/*
+	With this function we will get data from the web of wholesalers, and save that
+
+information on the database
+*/
 func GetData(db database.Database, w Wholesalers) {
 
 	// Starting data collector
@@ -64,7 +67,7 @@ func GetData(db database.Database, w Wholesalers) {
 
 	// Attach callbacks after login
 	c.OnResponse(func(r *colly.Response) {
-		log.Println("Response received", r.StatusCode)
+		log.Println("Response received: ", r.StatusCode, " URL: ", r.Request.URL)
 	})
 
 	c.OnHTML("html", func(e *colly.HTMLElement) {
@@ -119,7 +122,7 @@ func GetData(db database.Database, w Wholesalers) {
 	})
 
 	// FIXME Start scraping change numbers, this's only for tests
-	for i := 63; i < 1000; i++ {
+	for i := 1; i < 1000; i++ {
 		// Check when there are no products
 		if end {
 			fmt.Println("Searching end")
