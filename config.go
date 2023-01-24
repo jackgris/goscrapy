@@ -19,7 +19,7 @@ var (
 )
 
 // Will get all data needed for login on database and web pages
-func GetConfig() {
+func getConfig() {
 
 	// Getting config data
 	err := godotenv.Load("data.env")

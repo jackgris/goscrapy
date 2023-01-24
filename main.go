@@ -8,11 +8,11 @@ import (
 func main() {
 
 	// Getting all config needed for connections and pages login
-	GetConfig()
+	getConfig()
 	// Starting DB connection
 	db, err := database.Connect(dburi, dbuser, dbpass)
 	if err != nil {
-		panic("Error conection: " + err.Error())
+		panic("Error database connection: " + err.Error())
 	}
 	defer database.Disconnect()
 	// Getting and saving data
