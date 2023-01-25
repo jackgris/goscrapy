@@ -4,6 +4,8 @@
 * Database
 ** create a docker container with the database
 *** TODO up a mongo database with docker
+*** TODO create a collection for every wholesaler
+*** TODO create a new database with the purpose of testing
 
 * API
 ** Create endpoints for:
