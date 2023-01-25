@@ -10,7 +10,7 @@
 *.el
 *.go#
 *.#*
-*.env
+data.env
 *.env~
 goscrapy
 
