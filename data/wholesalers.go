@@ -1,4 +1,4 @@
-package wholesalers
+package data
 
 import (
 	"github.com/PuerkitoBio/goquery"
