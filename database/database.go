@@ -128,12 +128,14 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 
 	products := []Product{}
 	collection := db.client.Database("mayorista").Collection("productos")
-	cur, err := collection.Find(m.ctx, Product{Wholesaler: name})
+	filter := bson.M{"wholesaler": name}
+	cur, err := collection.Find(m.ctx, filter)
 	if err != nil {
 		fmt.Println("Error ReadByWholesaler getting cursor: ", err)
 		return products
 	}
 	defer cur.Close(db.ctx)
+
 	for cur.Next(db.ctx) {
 		var result Product
 		err := cur.Decode(&result)
@@ -147,7 +149,6 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 	if err := cur.Err(); err != nil {
 		fmt.Println("Error ReadByWholersalers cursor: ", err)
 	}
-
 	return products
 }
 

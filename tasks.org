@@ -6,6 +6,8 @@
 *** TODO up a mongo database with docker
 *** TODO create a collection for every wholesaler
 *** TODO create a new database with the purpose of testing
+*** DONE get all products by wholesaler
+CLOSED: [2023-01-25 Wed 19:44]
 
 * API
 ** Create endpoints for:
@@ -14,6 +16,8 @@
 *** TODO get all products
 *** TODO update products, save new price and date
 *** TODO get all prices changes through time
+*** DONE start scraping with a petition
+CLOSED: [2023-01-25 Wed 18:27]
 
 * Consume info
 ** create front-ends (we will use React only with the propose of test somethings)
