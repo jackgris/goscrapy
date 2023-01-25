@@ -48,7 +48,7 @@ type Wholesalers struct {
 
 information on the database
 */
-func GetData(db database.Database, w Wholesalers) {
+func GetData(db database.Database, w Wholesalers) error {
 
 	// Starting data collector
 	c := colly.NewCollector()
@@ -139,4 +139,6 @@ func GetData(db database.Database, w Wholesalers) {
 	}
 
 	fmt.Println(c.String())
+
+	return nil
 }

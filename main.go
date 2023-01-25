@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackgris/goscrapy/data"
 	"github.com/jackgris/goscrapy/database"
 )
@@ -15,6 +18,14 @@ func main() {
 		panic("Error database connection: " + err.Error())
 	}
 	defer database.Disconnect()
-	// Getting and saving data
-	data.GetData(db, getWholesalersData(config))
+
+	app := fiber.New()
+
+	app.Get("/scraping", func(c *fiber.Ctx) error {
+		// Getting and saving data
+		err := data.GetData(db, getWholesalersData(config))
+		return err
+	})
+
+	log.Fatal(app.Listen(":3000"))
 }
