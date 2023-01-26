@@ -30,6 +30,25 @@ db.createUser(
 ```
 from official [documentation](https://www.mongodb.com/docs/manual/tutorial/configure-scram-client-authentication)
 
+### Create backup, restore database and create a new one to testing
+
+This command will generate a backup from mayorista database and it will save it in the dump folder
+
+```javascript
+mongodump --db=mayorista
+```
+
+This command will create the mayorista2 database with all the data that we saved in the backup we stored in the dump folder
+with all the data of mayorista database
+
+```javascript
+mongorestore --db mayorista2 dump/mayorista --drop
+```
+
+from official [documentation](https://www.mongodb.com/docs/cloud-manager/tutorial/restore-single-database/)
+
+With this, we can test our application using a real database, with true values
+
 ## Project
 
 Run the project, at least for now, run this in the terminal while you are in the main folder.

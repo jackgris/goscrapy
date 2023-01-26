@@ -3,9 +3,12 @@
 
 * Database
 ** create a docker container with the database
-*** TODO up a mongo database with docker
+*** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
+*** DONE up a mongo database with docker
+CLOSED: [2023-01-25 Wed 23:57]
 *** TODO create a collection for every wholesaler
-*** TODO create a new database with the purpose of testing
+*** DONE create a new database with the purpose of testing
+CLOSED: [2023-01-26 Thu 19:57]
 *** DONE get all products by wholesaler
 CLOSED: [2023-01-25 Wed 19:44]
 
@@ -31,3 +34,7 @@ CLOSED: [2023-01-25 Wed 18:27]
 **** TODO compare prices of same product at different periods of time
 **** TODO make petition to update data products
 **** TODO show percentage of change prices (selecting one data and compare with the actual price)
+
+* Repository
+** change architecture
+*** folders organization must have a complete change
