@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -22,6 +23,7 @@ type Database interface {
 
 // Data product needed, not mather what wholesaler get data
 type Product struct {
+	Id_         primitive.ObjectID `bson:"_id,omitempty"`
 	Id          string
 	Name        string
 	Image       string
@@ -109,6 +111,21 @@ func (m *MongoDb) ReadById(p Product) Product {
 
 	if err != nil {
 		fmt.Println("Error ReadById cursor: ", err)
+	}
+
+	return product
+}
+
+// Reading from database, a product identified with his ID
+func (m *MongoDb) ReadByMongoId(p Product) Product {
+
+	collection := db.client.Database(m.name).Collection("productos")
+	r := collection.FindOne(db.ctx, bson.M{"_id": p.Id_})
+	product := Product{}
+	err := r.Decode(&product)
+
+	if err != nil {
+		fmt.Println("Error ReadByMongoId cursor: ", err)
 	}
 
 	return product

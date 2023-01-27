@@ -23,11 +23,13 @@ CLOSED: [2023-01-27 Fri 18:21]
 ** Create endpoints for:
 *** DONE start scraping with a petition
 CLOSED: [2023-01-25 Wed 18:27]
+*** DONE get all products
+CLOSED: [2023-01-27 Fri 20:42]
 *** TODO save wholesalers data
 *** TODO save products with price info and wholesaler
-*** TODO get all products
 *** TODO update products, save new price and date
 *** TODO get all prices changes through time
+*** TODO search product by name or other data
 
 * Consume info
 ** create front-ends (we will use React only with the propose of test somethings)
