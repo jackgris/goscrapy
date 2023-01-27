@@ -11,6 +11,8 @@ CLOSED: [2023-01-25 Wed 23:57]
 CLOSED: [2023-01-26 Thu 19:57]
 *** DONE get all products by wholesaler
 CLOSED: [2023-01-25 Wed 19:44]
+*** DONE use different database when run tests
+CLOSED: [2023-01-26 Thu 21:16]
 
 * API
 ** Create endpoints for:

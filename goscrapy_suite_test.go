@@ -20,9 +20,10 @@ var _ = BeforeSuite(func() {
 
 	// Getting all config needed for connections and pages login
 	setup := config.Get()
+
 	var err error
 	// Starting DB connection
-	db, err = database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass)
+	db, err = database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass, "mayorista2")
 	if err != nil {
 		panic("Error database connection: " + err.Error())
 	}

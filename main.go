@@ -15,7 +15,7 @@ func main() {
 	setup := config.Get()
 
 	// Starting DB connection
-	db, err := database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass)
+	db, err := database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass, "mayorista")
 	if err != nil {
 		panic("Error database connection: " + err.Error())
 	}

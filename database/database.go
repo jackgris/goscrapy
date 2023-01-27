@@ -36,6 +36,7 @@ type MongoDb struct {
 	client *mongo.Client
 	ctx    context.Context
 	cancel context.CancelFunc
+	name   string
 }
 
 // vars needed for only created one instance for my access to the database
@@ -47,7 +48,7 @@ var (
 // Connecting to the database, only one instance will be create, to connect with mongo database, we need
 // the URI where are the DB, the user name and password, and will return the instance with an active connection
 // or an error
-func Connect(dburi, dbuser, dbpass string) (*MongoDb, error) {
+func Connect(dburi, dbuser, dbpass, name string) (*MongoDb, error) {
 
 	var err error
 	once.Do(func() {
@@ -66,6 +67,9 @@ func Connect(dburi, dbuser, dbpass string) (*MongoDb, error) {
 		err = db.client.Ping(db.ctx, readpref.Primary())
 
 	})
+
+	db.name = name
+
 	return db, err
 }
 
@@ -82,7 +86,7 @@ func Disconnect() {
 // is can't do this, return error
 func (db *MongoDb) Create(p Product) error {
 
-	collection := db.client.Database("mayorista").Collection("productos")
+	collection := db.client.Database(db.name).Collection("productos")
 	products := db.ReadById(p)
 	var err error
 	if len(products) > 0 {
@@ -99,7 +103,7 @@ func (db *MongoDb) Create(p Product) error {
 func (m *MongoDb) ReadById(p Product) []Product {
 
 	products := []Product{}
-	collection := db.client.Database("mayorista").Collection("productos")
+	collection := db.client.Database(m.name).Collection("productos")
 	cur, err := collection.Find(db.ctx, bson.M{"id": p.Id})
 	if err != nil {
 		fmt.Println("Error ReadById getting cursor: ", err)
@@ -127,7 +131,7 @@ func (m *MongoDb) ReadById(p Product) []Product {
 func (m *MongoDb) ReadByWholesalers(name string) []Product {
 
 	products := []Product{}
-	collection := db.client.Database("mayorista").Collection("productos")
+	collection := db.client.Database(db.name).Collection("productos")
 	filter := bson.M{"wholesaler": name}
 	cur, err := collection.Find(m.ctx, filter)
 	if err != nil {
@@ -155,7 +159,7 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 // Delete a product from DB, if can't do this, return an error. And will print when not found matchs
 func (m *MongoDb) Delete(p Product) error {
 
-	collection := db.client.Database("mayorista").Collection("productos")
+	collection := db.client.Database(db.name).Collection("productos")
 	result, err := collection.DeleteOne(db.ctx, p)
 	if result.DeletedCount == 0 {
 		fmt.Println("Delete not found match")
