@@ -1,4 +1,4 @@
-package main_test
+package database_test
 
 import (
 	"github.com/jackgris/goscrapy/database"

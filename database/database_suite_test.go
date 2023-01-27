@@ -1,4 +1,4 @@
-package main_test
+package database_test
 
 import (
 	"testing"
@@ -19,7 +19,7 @@ func TestGoscrapy(t *testing.T) {
 var _ = BeforeSuite(func() {
 
 	// Getting all config needed for connections and pages login
-	setup := config.Get()
+	setup := config.Get("../data.env")
 
 	var err error
 	// Starting DB connection

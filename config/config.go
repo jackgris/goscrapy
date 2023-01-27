@@ -19,10 +19,10 @@ type Data struct {
 }
 
 // Will get all data needed for login on database and web pages
-func Get() Data {
+func Get(path string) Data {
 
 	// Getting config data
-	err := godotenv.Load("data.env")
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Fatal("Error loading config file")
 	}

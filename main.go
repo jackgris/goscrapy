@@ -12,7 +12,7 @@ import (
 func main() {
 
 	// Getting all config needed for connections and pages login
-	setup := config.Get()
+	setup := config.Get("data.env")
 
 	// Starting DB connection
 	db, err := database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass, "mayorista")
