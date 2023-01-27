@@ -32,11 +32,15 @@ from official [documentation](https://www.mongodb.com/docs/manual/tutorial/confi
 
 ### Create backup, restore database and create a new one to testing
 
+#### Generate backup
+
 This command will generate a backup from mayorista database and it will save it in the dump folder
 
 ```javascript
 mongodump --db=mayorista
 ```
+
+#### Create database from backup
 
 This command will create the mayorista2 database with all the data that we saved in the backup we stored in the dump folder
 with all the data of mayorista database
@@ -49,10 +53,33 @@ from official [documentation](https://www.mongodb.com/docs/cloud-manager/tutoria
 
 With this, we can test our application using a real database, with true values
 
+### Docker container running our database
+
+Commands useful when you are working with a database inside a docker container
+
+#### Getting the backup to our file system
+
+Getting the database backup from the docker container to the host
+
+```javascript
+sudo docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
+```
+
+from official [documentation](https://docs.docker.com/engine/reference/commandline/cp/)
+
 ## Project
 
-Run the project, at least for now, run this in the terminal while you are in the main folder.
+### Setup database
+
+For testing propose you need to run a mongodb restoring the data contain in the folder backup/products-database
+
+### Run the project
+
+At least for now, run this in the terminal while you are in the main folder.
 
 ```bash
 go build . && ./goscrapy
 ```
+### Automation project setup
+
+Later we will write a makefile that is going to help us to make all these steps in an automatic way

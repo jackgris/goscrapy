@@ -3,26 +3,28 @@
 
 * Database
 ** create a docker container with the database
-*** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
 *** DONE up a mongo database with docker
 CLOSED: [2023-01-25 Wed 23:57]
-*** TODO create a collection for every wholesaler
 *** DONE create a new database with the purpose of testing
 CLOSED: [2023-01-26 Thu 19:57]
 *** DONE get all products by wholesaler
 CLOSED: [2023-01-25 Wed 19:44]
 *** DONE use different database when run tests
 CLOSED: [2023-01-26 Thu 21:16]
+*** DONE make a backup of the database with the data that we are going to use to run the tests
+CLOSED: [2023-01-26 Thu 21:51]
+*** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
+*** TODO create a collection for every wholesaler
 
 * API
 ** Create endpoints for:
+*** DONE start scraping with a petition
+CLOSED: [2023-01-25 Wed 18:27]
 *** TODO save wholesalers data
 *** TODO save products with price info and wholesaler
 *** TODO get all products
 *** TODO update products, save new price and date
 *** TODO get all prices changes through time
-*** DONE start scraping with a petition
-CLOSED: [2023-01-25 Wed 18:27]
 
 * Consume info
 ** create front-ends (we will use React only with the propose of test somethings)
