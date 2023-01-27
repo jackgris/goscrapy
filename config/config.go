@@ -16,6 +16,7 @@ type Data struct {
 	Dburi      string
 	Dbuser     string
 	Dbpass     string
+	NameSaler  string
 }
 
 // Will get all data needed for login on database and web pages
@@ -34,6 +35,7 @@ func Get(path string) Data {
 	config.Dburi = os.Getenv("DBURI")
 	config.Dbuser = os.Getenv("DBUSER")
 	config.Dbpass = os.Getenv("DBPASS")
+	config.NameSaler = os.Getenv("WHOLESALER")
 
 	return config
 }

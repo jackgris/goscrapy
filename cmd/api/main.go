@@ -24,7 +24,8 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/products", func(c *fiber.Ctx) error {
-		return nil
+		products := db.ReadByWholesalers(setup.NameSaler)
+		return c.JSON(products)
 	})
 
 	app.Get("/scraping", func(c *fiber.Ctx) error {
