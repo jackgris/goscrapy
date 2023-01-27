@@ -4,6 +4,8 @@ Here I will add some useful commands to remenber on future
 
 ## Docker
 
+### Create mongodb container
+
 How you can create a container running mongodb:
 
 ```bash
@@ -14,6 +16,21 @@ docker run -d --network some-network --name some-mongo \
 ```
 
 from [documentation](https://hub.docker.com/_/mongo)
+
+### Backup from our database
+
+Commands useful when you are working with a database inside a docker container
+
+#### Getting the backup to our file system
+
+Getting the database backup from the docker container to the host
+
+```javascript
+sudo docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
+```
+
+from official [documentation](https://docs.docker.com/engine/reference/commandline/cp/)
+
 
 ## MongoDB
 
@@ -53,19 +70,6 @@ from official [documentation](https://www.mongodb.com/docs/cloud-manager/tutoria
 
 With this, we can test our application using a real database, with true values
 
-### Docker container running our database
-
-Commands useful when you are working with a database inside a docker container
-
-#### Getting the backup to our file system
-
-Getting the database backup from the docker container to the host
-
-```javascript
-sudo docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
-```
-
-from official [documentation](https://docs.docker.com/engine/reference/commandline/cp/)
 
 ## Project
 
