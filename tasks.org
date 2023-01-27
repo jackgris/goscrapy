@@ -13,6 +13,9 @@ CLOSED: [2023-01-25 Wed 19:44]
 CLOSED: [2023-01-26 Thu 21:16]
 *** DONE make a backup of the database with the data that we are going to use to run the tests
 CLOSED: [2023-01-26 Thu 21:51]
+*** DONE get one product by Id
+CLOSED: [2023-01-27 Fri 18:21]
+*** TODO use _id on mongodb
 *** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
 *** TODO create a collection for every wholesaler
 
@@ -42,3 +45,4 @@ CLOSED: [2023-01-25 Wed 18:27]
 * Repository
 ** change architecture
 *** folders organization must have a complete change
+*** log error in a better a consistent way

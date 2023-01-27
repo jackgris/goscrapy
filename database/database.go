@@ -15,7 +15,7 @@ import (
 // Interface useful for mocking test, or if need change database
 type Database interface {
 	Create(p Product) error
-	ReadById(p Product) []Product
+	ReadById(p Product) Product
 	ReadByWholesalers(name string) []Product
 	Delete(p Product) error
 }
@@ -87,10 +87,10 @@ func Disconnect() {
 func (db *MongoDb) Create(p Product) error {
 
 	collection := db.client.Database(db.name).Collection("productos")
-	products := db.ReadById(p)
+	product := db.ReadById(p)
 	var err error
-	if len(products) > 0 {
-		if products[len(products)-1].Price != p.Price {
+	if product.Id != "" {
+		if product.Price != p.Price {
 			_, err = collection.InsertOne(db.ctx, p)
 		}
 	} else {
@@ -100,31 +100,18 @@ func (db *MongoDb) Create(p Product) error {
 }
 
 // Reading from database, a product identified with his ID
-func (m *MongoDb) ReadById(p Product) []Product {
+func (m *MongoDb) ReadById(p Product) Product {
 
-	products := []Product{}
 	collection := db.client.Database(m.name).Collection("productos")
-	cur, err := collection.Find(db.ctx, bson.M{"id": p.Id})
+	r := collection.FindOne(db.ctx, bson.M{"id": p.Id})
+	product := Product{}
+	err := r.Decode(&product)
+
 	if err != nil {
-		fmt.Println("Error ReadById getting cursor: ", err)
-		return products
-	}
-	defer cur.Close(db.ctx)
-	for cur.Next(db.ctx) {
-		var result Product
-		err := cur.Decode(&result)
-		if err != nil {
-			fmt.Println("Error ReadById decode bson: ", err)
-		}
-
-		products = append(products, result)
-	}
-
-	if err := cur.Err(); err != nil {
 		fmt.Println("Error ReadById cursor: ", err)
 	}
 
-	return products
+	return product
 }
 
 // Reading from database and returning all products from one wholesaler
