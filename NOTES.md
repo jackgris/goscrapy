@@ -25,8 +25,8 @@ Commands useful when you are working with a database inside a docker container
 
 Getting the database backup from the docker container to the host
 
-```javascript
-sudo docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
+```bash
+docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
 ```
 
 from official [documentation](https://docs.docker.com/engine/reference/commandline/cp/)
