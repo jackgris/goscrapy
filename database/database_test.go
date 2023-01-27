@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Database", func() {
+var _ = Describe("Database access functions", func() {
 
 	Context("Getting all products", func() {
 

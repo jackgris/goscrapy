@@ -13,7 +13,7 @@ var db *database.MongoDb
 
 func TestGoscrapy(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Goscrapy Suite")
+	RunSpecs(t, "Database test Suite")
 }
 
 var _ = BeforeSuite(func() {
@@ -22,7 +22,7 @@ var _ = BeforeSuite(func() {
 	setup := config.Get("../data.env")
 
 	var err error
-	// Starting DB connection
+	// Starting DB connection with a test database
 	db, err = database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass, "mayorista2")
 	if err != nil {
 		panic("Error database connection: " + err.Error())
