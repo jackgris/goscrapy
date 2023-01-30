@@ -15,7 +15,10 @@ CLOSED: [2023-01-26 Thu 21:16]
 CLOSED: [2023-01-26 Thu 21:51]
 *** DONE get one product by Id
 CLOSED: [2023-01-27 Fri 18:21]
-*** TODO use _id on mongodb
+*** DONE use _id on mongodb
+CLOSED: [2023-01-30 Mon 19:58]
+*** DONE test insert and saved products
+CLOSED: [2023-01-30 Mon 19:59]
 *** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
 *** TODO create a collection for every wholesaler
 
@@ -25,6 +28,8 @@ CLOSED: [2023-01-27 Fri 18:21]
 CLOSED: [2023-01-25 Wed 18:27]
 *** DONE get all products
 CLOSED: [2023-01-27 Fri 20:42]
+*** DONE separate handlers from main file
+CLOSED: [2023-01-30 Mon 20:35]
 *** TODO save wholesalers data
 *** TODO save products with price info and wholesaler
 *** TODO update products, save new price and date
