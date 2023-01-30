@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -164,12 +165,12 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 func (m *MongoDb) Delete(p Product) error {
 
 	collection := db.client.Database(db.name).Collection("productos")
-	result, err := collection.DeleteOne(db.ctx, p)
+	result, err := collection.DeleteOne(db.ctx, bson.M{"_id": p.Id_})
 	if result.DeletedCount == 0 {
-		fmt.Println("Delete not found match")
+		return errors.New("Delete not found match")
 	}
-	if result.DeletedCount == 1 {
-		fmt.Println("Delete found many matchs")
+	if result.DeletedCount > 1 {
+		return errors.New("Delete found many matchs")
 	}
 	return err
 }

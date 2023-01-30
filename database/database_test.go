@@ -72,4 +72,43 @@ var _ = Describe("Database access functions", func() {
 			Expect(product).To(Equal(t))
 		})
 	})
+
+	Context("Saved and delete one product", func() {
+
+		newId, err := primitive.ObjectIDFromHex("64d06463b27694842b0af53e")
+
+		tProduct := t
+		tProduct.Id = "testingID"
+		tProduct.Id_ = newId
+
+		It("Create newId like mongo ObjectID", func() {
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("Saved new product on database", func() {
+			err = db.Create(tProduct)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("Read new product from database", func() {
+			newP := db.ReadByMongoId(database.Product{Id_: newId})
+			Expect(newP).To(Equal(tProduct))
+		})
+
+		It("Delete the new product created for test propose", func() {
+			err = db.Delete(database.Product{Id_: newId})
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("Check new product was deleted correctly", func() {
+			new := db.ReadByMongoId(database.Product{Id_: newId})
+			Expect(new).To(Equal(database.Product{}))
+		})
+
+		It("Delete not found product", func() {
+			err = db.Delete(database.Product{Id_: newId})
+			Expect(err).NotTo(BeNil())
+		})
+
+	})
 })
