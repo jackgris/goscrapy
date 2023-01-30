@@ -28,11 +28,17 @@ var _ = Describe("Database access functions", func() {
 			products := db.ReadByWholesalers("acabajo")
 			Expect(len(products)).To(Equal(349))
 		})
+
+		It("should return 0 product", func() {
+			products := db.ReadByWholesalers("testing")
+			Expect(len(products)).To(Equal(0))
+		})
+
 	})
 
 	Context("Getting one product by ID", func() {
 
-		It("should return any product", func() {
+		It("should return an empty product", func() {
 			p := database.Product{Id: "1234"}
 			t := database.Product{}
 
