@@ -13,7 +13,7 @@
 data.env
 *.env~
 goscrapy
-api
+cmd/api/api
 
 # Database test
 MANIFEST
