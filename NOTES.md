@@ -9,10 +9,11 @@ Here I will add some useful commands to remenber on future
 How you can create a container running mongodb:
 
 ```bash
-docker run -d --network some-network --name some-mongo \
-	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
-	-e MONGO_INITDB_ROOT_PASSWORD=secret \
-	mongo
+docker run -d -p 27017:27017 --name goscrapy-mongo -v mongo-data:/data/db \
+         -e MONGO_INITDB_DATABASE=admin \
+         -e MONGODB_INITDB_ROOT_USERNAME=admin \
+         -e MONGODB_INITDB_ROOT_PASSWORD=admin \
+         mongo:latest
 ```
 
 from [documentation](https://hub.docker.com/_/mongo)
@@ -31,6 +32,34 @@ docker cp goscrapy-mongo:/dump/mayorista/productos.bson ~/Downloads
 
 from official [documentation](https://docs.docker.com/engine/reference/commandline/cp/)
 
+### You can make the mongo database images from a Dockerfile
+
+#### Build our container
+
+This command needs to be run inside the folder where you have the Dockerfile of our database, in this case
+is inside the database folder of our project.
+The flag -t is for put a name to our image, so you can change mongodb-from-dockerfile for anything you want.
+
+```bash
+docker build -t mongodb-from-dockerfile .
+```
+
+#### Run our container
+
+Once you create the docker image with the Dockerfile, you can run a container based on that image.
+The flag -d is for run the container in a detached way, and with --name you can set the name you want for that container. That will make it easier to remember. And the flag -p is one of the most important because will publish a container's port(s) to the host.
+
+```bash
+docker run -d  -p 27017:27017 --name mongo-scrapy mongodb-from-dockerfile
+```
+
+#### Start our mongosh terminal
+
+After run the container, if you want to use the database with shell of mongo, you can run this command, remember that mongo-scrapy is the name of the container, so if you change it that when run the container, you need to change the name on this command.
+
+```bash
+docker exec -it mongo-scrapy mongosh
+```
 
 ## MongoDB
 
@@ -53,7 +82,7 @@ from official [documentation](https://www.mongodb.com/docs/manual/tutorial/confi
 
 This command will generate a backup from mayorista database and it will save it in the dump folder
 
-```javascript
+```bash
 mongodump --db=mayorista
 ```
 
@@ -62,7 +91,7 @@ mongodump --db=mayorista
 This command will create the mayorista2 database with all the data that we saved in the backup we stored in the dump folder
 with all the data of mayorista database
 
-```javascript
+```bash
 mongorestore --db mayorista2 dump/mayorista --drop
 ```
 

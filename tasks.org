@@ -19,7 +19,8 @@ CLOSED: [2023-01-27 Fri 18:21]
 CLOSED: [2023-01-30 Mon 19:58]
 *** DONE test insert and saved products
 CLOSED: [2023-01-30 Mon 19:59]
-*** TODO write a dockerfile for automate get up database container, and maybe cleanup testing database
+*** DONE write a dockerfile for automate get up database container, and maybe cleanup testing database
+CLOSED: [2023-02-01 Wed 20:48]
 *** TODO create a collection for every wholesaler
 
 * API
