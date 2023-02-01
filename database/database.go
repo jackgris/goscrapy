@@ -56,7 +56,7 @@ func Connect(dburi, dbuser, dbpass, name string) (*MongoDb, error) {
 	var err error
 	once.Do(func() {
 		db = new(MongoDb)
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		db.cancel = cancel
 		db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
