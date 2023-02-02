@@ -7,7 +7,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.6 // indirect
 	github.com/antchfx/xmlquery v1.3.14 // indirect
 	github.com/gocolly/colly/v2 v2.1.0
-	github.com/gofiber/fiber/v2 v2.41.0 // indirect
+	github.com/gofiber/fiber/v2 v2.41.0
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/klauspost/compress v1.15.15 // indirect
