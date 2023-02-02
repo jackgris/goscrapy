@@ -53,6 +53,9 @@ The flag -d is for run the container in a detached way, and with --name you can 
 docker run -d  -p 27017:27017 --name mongo-scrapy mongodb-from-dockerfile
 ```
 
+from official [documentation](https://docs.docker.com/engine/reference/commandline/run/)
+
+
 #### Start our mongosh terminal
 
 After run the container, if you want to use the database with shell of mongo, you can run this command, remember that mongo-scrapy is the name of the container, so if you change it that when run the container, you need to change the name on this command.
