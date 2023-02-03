@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jackgris/goscrapy/data"
+	"github.com/jackgris/goscrapy/database"
 	"github.com/joho/godotenv"
 )
 
@@ -42,10 +42,10 @@ func Get(path string) Data {
 
 // This function will return a wholesaler with all data needed for login, and web navigation
 // We need this for extracting and saving data from his web server
-func GetWholesalersData(config Data) data.Wholesalers {
+func GetWholesalersData(config Data) database.Wholesalers {
 
 	// FIXME need a more elegant and better solution for this
-	w := data.Wholesalers{}
+	w := database.Wholesalers{}
 	w.Login = config.login
 	w.User = config.User
 	w.Pass = config.Pass

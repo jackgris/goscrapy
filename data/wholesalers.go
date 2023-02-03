@@ -36,19 +36,8 @@ type InventoryLevel struct {
 	Stock string `json:"value"`
 }
 
-type Wholesalers struct {
-	Login      string
-	User       string
-	Pass       string
-	Searchpage string
-}
-
-/*
-	With this function we will get data from the web of wholesalers, and save that
-
-information on the database
-*/
-func GetData(db database.Database, w Wholesalers) error {
+// GetData will get data from the web of wholesalers, and save that information on the database
+func GetData(db database.Database, w database.Wholesalers) error {
 
 	// Starting data collector
 	c := colly.NewCollector()
