@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var _ = Describe("Database access functions", func() {
+var _ = Describe("Database access for products", func() {
 
 	oId, err := primitive.ObjectIDFromHex("63d06463b27694842b0af52e")
 	Expect(err).NotTo(HaveOccurred())
