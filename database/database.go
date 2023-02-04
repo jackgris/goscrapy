@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -40,6 +41,7 @@ type MongoDb struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 	name   string
+	log    *logrus.Logger
 }
 
 // vars needed for only created one instance for my access to the database
@@ -51,11 +53,12 @@ var (
 // Connecting to the database, only one instance will be create, to connect with mongo database, we need
 // the URI where are the DB, the user name and password, and will return the instance with an active connection
 // or an error
-func Connect(dburi, dbuser, dbpass, name string) (*MongoDb, error) {
+func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, error) {
 
 	var err error
 	once.Do(func() {
 		db = new(MongoDb)
+		db.log = log
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		db.cancel = cancel
 		db.ctx = ctx

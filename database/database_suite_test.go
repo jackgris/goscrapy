@@ -7,6 +7,7 @@ import (
 	"github.com/jackgris/goscrapy/database"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/sirupsen/logrus"
 )
 
 var db *database.MongoDb
@@ -21,9 +22,12 @@ var _ = BeforeSuite(func() {
 	// Getting all config needed for connections and pages login
 	setup := config.Get("../data.env")
 
+	log := logrus.New()
+
 	var err error
 	// Starting DB connection with a test database
-	db, err = database.Connect(setup.Dburi, setup.Dbuser, setup.Dbpass, "mayorista2")
+	db, err = database.Connect(setup.Dburi, setup.Dbuser,
+		setup.Dbpass, "mayorista2", log)
 	if err != nil {
 		panic("Error database connection: " + err.Error())
 	}

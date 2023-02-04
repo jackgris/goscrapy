@@ -16,6 +16,7 @@ require (
 	github.com/onsi/gomega v1.24.1
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
+	github.com/sirupsen/logrus v1.8.2
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
