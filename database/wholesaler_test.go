@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var _ = Describe("Database access for products", func() {
+var _ = Describe("Database access for wholesalers", func() {
 
 	id, _ := primitive.ObjectIDFromHex("63dd8cce380a7efc7b39aea5")
 

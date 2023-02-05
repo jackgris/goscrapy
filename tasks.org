@@ -21,7 +21,8 @@ CLOSED: [2023-01-30 Mon 19:58]
 CLOSED: [2023-01-30 Mon 19:59]
 *** DONE write a dockerfile for automate get up database container, and maybe cleanup testing database
 CLOSED: [2023-02-01 Wed 20:48]
-*** TODO create a collection for every wholesaler
+*** DONE create a collection for every wholesaler
+CLOSED: [2023-02-05 Sun 19:49]
 
 * API
 ** Create endpoints for:
@@ -36,6 +37,7 @@ CLOSED: [2023-01-30 Mon 20:35]
 *** TODO update products, save new price and date
 *** TODO get all prices changes through time
 *** TODO search product by name or other data
+*** TODO automate billing of a business, using ID of sales
 
 * Consume info
 ** create front-ends (we will use React only with the propose of test somethings)

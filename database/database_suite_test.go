@@ -19,10 +19,10 @@ func TestGoscrapy(t *testing.T) {
 
 var _ = BeforeSuite(func() {
 
-	// Getting all config needed for connections and pages login
-	setup := config.Get("../data.env")
-
 	log := logrus.New()
+
+	// Getting all config needed for connections and pages login
+	setup := config.Get("../data.env", log)
 
 	var err error
 	// Starting DB connection with a test database
