@@ -41,7 +41,7 @@ type MongoDb struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 	name   string
-	log    *logrus.Logger
+	Log    *logrus.Logger
 }
 
 // vars needed for only created one instance for my access to the database
@@ -58,7 +58,7 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 	var err error
 	once.Do(func() {
 		db = new(MongoDb)
-		db.log = log
+		db.Log = log
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		db.cancel = cancel
 		db.ctx = ctx

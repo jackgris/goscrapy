@@ -4,10 +4,9 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
 	"github.com/jackgris/goscrapy/database"
+	"github.com/sirupsen/logrus"
 
 	"encoding/json"
-	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -37,13 +36,13 @@ type InventoryLevel struct {
 }
 
 // GetData will get data from the web of wholesalers, and save that information on the database
-func GetData(db database.Database, w database.Wholesalers) error {
+func GetData(db database.Database, w database.Wholesalers, log *logrus.Logger) error {
 
 	// Starting data collector
 	c := colly.NewCollector()
 	err := c.Limit(&colly.LimitRule{Delay: 5 * time.Second})
 	if err != nil {
-		fmt.Println("Getdata: ", err)
+		log.Error("Getdata: " + err.Error())
 	}
 	// With this we know when is the last page of catalog
 	end := false
@@ -100,7 +99,7 @@ func GetData(db database.Database, w database.Wholesalers) error {
 				}
 				err := db.Create(product)
 				if err != nil {
-					fmt.Println("Can´t save product: ", err)
+					log.Warn("Can´t save product: ", err)
 				}
 			}
 		})
@@ -114,7 +113,7 @@ func GetData(db database.Database, w database.Wholesalers) error {
 	for i := 1; i < 1000; i++ {
 		// Check when there are no products
 		if end {
-			fmt.Println("Searching end")
+			log.Debug("Searching end")
 			break
 		}
 
@@ -123,11 +122,11 @@ func GetData(db database.Database, w database.Wholesalers) error {
 
 		err := c.Visit(URL)
 		if err != nil {
-			fmt.Println("Error visiting site: ", err)
+			log.Debug("Error visiting site: ", err)
 		}
 	}
 
-	fmt.Println(c.String())
+	log.Debug(c.String())
 
 	return nil
 }

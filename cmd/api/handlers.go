@@ -8,6 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func Home(c *fiber.Ctx) error {
+	db.Log.Info("Until now, this is only for test propuse")
+	r := struct{ Message string }{Message: "THIS HOME"}
+	return c.JSON(r)
+}
+
 func getProductById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	oId, _ := primitive.ObjectIDFromHex(id)
@@ -28,6 +34,6 @@ func getAllProducts(c *fiber.Ctx) error {
 
 func scraper(c *fiber.Ctx) error {
 	// Getting and saving data
-	err := data.GetData(db, config.GetWholesalersData(setup))
+	err := data.GetData(db, config.GetWholesalersData(setup, db.Log), db.Log)
 	return err
 }

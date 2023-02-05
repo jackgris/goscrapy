@@ -12,11 +12,18 @@ var err error
 var setup config.Data
 
 func main() {
+	log := logrus.New()
+	log.SetLevel(logrus.InfoLevel)
+	log.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp:          true,
+		TimestampFormat:        "2006-01-02 15:04:05",
+		ForceColors:            true,
+		DisableLevelTruncation: true,
+	})
 
 	// Getting all config needed for connections and pages login
-	setup = config.Get("../../data.env")
+	setup = config.Get("../../data.env", log)
 
-	log := logrus.New()
 	// Starting DB connection
 	db, err = database.Connect(setup.Dburi, setup.Dbuser,
 		setup.Dbpass, "mayorista", log)
@@ -30,5 +37,6 @@ func main() {
 	app.Get("/products/:id", getProductById)
 	app.Get("/products", getAllProducts)
 	app.Get("/scraping", scraper)
+	app.Get("/", Home)
 	log.Fatal(app.Listen(":3000"))
 }
