@@ -20,6 +20,13 @@ func TestGoscrapy(t *testing.T) {
 var _ = BeforeSuite(func() {
 
 	log := logrus.New()
+	log.SetLevel(logrus.WarnLevel)
+	log.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp:          true,
+		TimestampFormat:        "2006-01-02 15:04:05",
+		ForceColors:            true,
+		DisableLevelTruncation: true,
+	})
 
 	// Getting all config needed for connections and pages login
 	setup := config.Get("../data.env", log)
@@ -29,8 +36,9 @@ var _ = BeforeSuite(func() {
 	db, err = database.Connect(setup.Dburi, setup.Dbuser,
 		setup.Dbpass, "mayorista2", log)
 	if err != nil {
-		panic("Error database connection: " + err.Error())
+		log.Panicf("Error database connection %s", err.Error())
 	}
+	log.Warn("Established database connection")
 })
 
 var _ = AfterSuite(func() {

@@ -2,7 +2,6 @@ package database
 
 import (
 	"errors"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -41,7 +40,7 @@ func (m *MongoDb) GetWhosalerById(w Wholesalers) Wholesalers {
 	err := r.Decode(&wholesaler)
 
 	if err != nil {
-		fmt.Println("Error GetWhosalerById cursor: ", err)
+		m.Log.Info("GetWhosalerById cursor: ", err)
 	}
 
 	return wholesaler
@@ -55,7 +54,7 @@ func (m *MongoDb) FindWholesalers() []Wholesalers {
 	filter := bson.D{}
 	cur, err := collection.Find(m.ctx, filter)
 	if err != nil {
-		fmt.Println("Error FindWhosalers getting cursor: ", err)
+		m.Log.Info("FindWhosalers getting cursor: ", err)
 		return whosalers
 	}
 	defer cur.Close(db.ctx)
@@ -64,14 +63,14 @@ func (m *MongoDb) FindWholesalers() []Wholesalers {
 		var result Wholesalers
 		err := cur.Decode(&result)
 		if err != nil {
-			fmt.Println("Error FindWhosalers decode bson: ", err)
+			m.Log.Info("FindWhosalers decode bson: ", err)
 		}
 
 		whosalers = append(whosalers, result)
 	}
 
 	if err := cur.Err(); err != nil {
-		fmt.Println("Error FindWhosalers cursor: ", err)
+		m.Log.Info("FindWhosalers cursor: ", err)
 	}
 	return whosalers
 }

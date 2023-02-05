@@ -2,7 +2,6 @@ package database
 
 import (
 	"errors"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -46,7 +45,7 @@ func (m *MongoDb) ReadById(p Product) Product {
 	err := r.Decode(&product)
 
 	if err != nil {
-		fmt.Println("Error ReadById cursor: ", err)
+		m.Log.Info("ReadById cursor: ", err)
 	}
 
 	return product
@@ -61,7 +60,7 @@ func (m *MongoDb) ReadByMongoId(p Product) Product {
 	err := r.Decode(&product)
 
 	if err != nil {
-		fmt.Println("Error ReadByMongoId cursor: ", err)
+		m.Log.Info("ReadByMongoId cursor: ", err)
 	}
 
 	return product
@@ -75,7 +74,7 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 	filter := bson.M{"wholesaler": name}
 	cur, err := collection.Find(m.ctx, filter)
 	if err != nil {
-		fmt.Println("Error ReadByWholesaler getting cursor: ", err)
+		m.Log.Info("ReadByWholesaler getting cursor: ", err)
 		return products
 	}
 	defer cur.Close(db.ctx)
@@ -84,14 +83,14 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 		var result Product
 		err := cur.Decode(&result)
 		if err != nil {
-			fmt.Println("Error ReadByWholesalers decode bson: ", err)
+			m.Log.Info("ReadByWholesalers decode bson: ", err)
 		}
 
 		products = append(products, result)
 	}
 
 	if err := cur.Err(); err != nil {
-		fmt.Println("Error ReadByWholersalers cursor: ", err)
+		m.Log.Info("ReadByWholersalers cursor: ", err)
 	}
 	return products
 }

@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -53,7 +52,7 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 
 		db.client, err = mongo.Connect(db.ctx, option)
 		if err != nil {
-			panic("Can't connect with db" + err.Error())
+			log.Panicf("Can't connect with db: %s", err.Error())
 		}
 		err = db.client.Ping(db.ctx, readpref.Primary())
 
@@ -66,9 +65,9 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 
 // Closing the database connection, correctly
 func Disconnect() {
-	fmt.Println("Disconnecting from database")
+	db.Log.Warn("Disconnecting from database")
 	defer db.cancel()
 	if err := db.client.Disconnect(db.ctx); err != nil {
-		panic("Error trying close connection db: " + err.Error())
+		db.Log.Panicf("Error trying close connection db: %s", err.Error())
 	}
 }
