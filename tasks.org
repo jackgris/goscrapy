@@ -54,7 +54,9 @@ CLOSED: [2023-01-30 Mon 20:35]
 
 * Repository
 ** change architecture
-*** folders organization must have a complete change
-*** log error in a better a consistent way
+*** DONE folders organization must have a complete change
+CLOSED: [2023-02-08 Wed 19:23]
+*** DONE log error in a better a consistent way
+CLOSED: [2023-02-08 Wed 19:24]
 **** DONE change to logrus library
 CLOSED: [2023-02-07 Tue 21:08]
