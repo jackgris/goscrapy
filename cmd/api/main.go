@@ -7,7 +7,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var db *database.MongoDb
 var err error
 var setup config.Data
 
@@ -25,7 +24,7 @@ func main() {
 	setup = config.Get("../../data.env", log)
 
 	// Starting DB connection
-	db, err = database.Connect(setup.Dburi, setup.Dbuser,
+	_, err = database.Connect(setup.Dburi, setup.Dbuser,
 		setup.Dbpass, "mayorista", log)
 
 	if err != nil {
@@ -34,9 +33,9 @@ func main() {
 	defer database.Disconnect()
 
 	app := fiber.New()
-	app.Get("/products/:id", getProductById)
-	app.Get("/products", getAllProducts)
-	app.Get("/scraping", scraper)
+	app.Get("/products/:id", GetProductById)
+	app.Get("/products", GetAllProducts)
+	app.Get("/scraping", Scraper)
 	app.Get("/", Home)
 	log.Fatal(app.Listen(":3000"))
 }

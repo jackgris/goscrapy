@@ -9,16 +9,16 @@ import (
 )
 
 func Home(c *fiber.Ctx) error {
-	db.Log.Info("Until now, this is only for test propuse")
+	database.Db.Log.Info("Until now, this is only for test propuse")
 	r := struct{ Message string }{Message: "THIS HOME"}
 	return c.JSON(r)
 }
 
-func getProductById(c *fiber.Ctx) error {
+func GetProductById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	oId, _ := primitive.ObjectIDFromHex(id)
 	product := database.Product{Id_: oId}
-	product = db.ReadByMongoId(product)
+	product = database.Db.ReadByMongoId(product)
 	empty, _ := primitive.ObjectIDFromHex("000000000000000000000000")
 	if product.Id_ == empty {
 		r := struct{ Message string }{Message: "BAD ID"}
@@ -27,13 +27,13 @@ func getProductById(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-func getAllProducts(c *fiber.Ctx) error {
-	products := db.ReadByWholesalers(setup.NameSaler)
+func GetAllProducts(c *fiber.Ctx) error {
+	products := database.Db.ReadByWholesalers(setup.NameSaler)
 	return c.JSON(products)
 }
 
-func scraper(c *fiber.Ctx) error {
+func Scraper(c *fiber.Ctx) error {
 	// Getting and saving data
-	err := data.GetData(db, config.GetWholesalersData(setup, db.Log), db.Log)
+	err := data.GetData(database.Db, config.GetWholesalersData(setup, database.Db.Log), database.Db.Log)
 	return err
 }

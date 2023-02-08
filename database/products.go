@@ -37,44 +37,44 @@ func (db *MongoDb) Create(p Product) error {
 }
 
 // Reading from database, a product identified with his ID
-func (m *MongoDb) ReadById(p Product) Product {
+func (db *MongoDb) ReadById(p Product) Product {
 
-	collection := db.client.Database(m.name).Collection("productos")
+	collection := db.client.Database(db.name).Collection("productos")
 	r := collection.FindOne(db.ctx, bson.M{"id": p.Id})
 	product := Product{}
 	err := r.Decode(&product)
 
 	if err != nil {
-		m.Log.Info("ReadById cursor: ", err)
+		db.Log.Info("ReadById cursor: ", err)
 	}
 
 	return product
 }
 
 // Reading from database, a product identified with his ID
-func (m *MongoDb) ReadByMongoId(p Product) Product {
+func (db *MongoDb) ReadByMongoId(p Product) Product {
 
-	collection := db.client.Database(m.name).Collection("productos")
+	collection := db.client.Database(db.name).Collection("productos")
 	r := collection.FindOne(db.ctx, bson.M{"_id": p.Id_})
 	product := Product{}
 	err := r.Decode(&product)
 
 	if err != nil {
-		m.Log.Info("ReadByMongoId cursor: ", err)
+		db.Log.Info("ReadByMongoId cursor: ", err)
 	}
 
 	return product
 }
 
 // Reading from database and returning all products from one wholesaler
-func (m *MongoDb) ReadByWholesalers(name string) []Product {
+func (db *MongoDb) ReadByWholesalers(name string) []Product {
 
 	products := []Product{}
 	collection := db.client.Database(db.name).Collection("productos")
 	filter := bson.M{"wholesaler": name}
-	cur, err := collection.Find(m.ctx, filter)
+	cur, err := collection.Find(db.ctx, filter)
 	if err != nil {
-		m.Log.Info("ReadByWholesaler getting cursor: ", err)
+		db.Log.Info("ReadByWholesaler getting cursor: ", err)
 		return products
 	}
 	defer cur.Close(db.ctx)
@@ -83,20 +83,20 @@ func (m *MongoDb) ReadByWholesalers(name string) []Product {
 		var result Product
 		err := cur.Decode(&result)
 		if err != nil {
-			m.Log.Info("ReadByWholesalers decode bson: ", err)
+			db.Log.Info("ReadByWholesalers decode bson: ", err)
 		}
 
 		products = append(products, result)
 	}
 
 	if err := cur.Err(); err != nil {
-		m.Log.Info("ReadByWholersalers cursor: ", err)
+		db.Log.Info("ReadByWholersalers cursor: ", err)
 	}
 	return products
 }
 
 // Delete a product from DB, if can't do this, return an error. And will print when not found matchs
-func (m *MongoDb) Delete(p Product) error {
+func (db *MongoDb) Delete(p Product) error {
 
 	collection := db.client.Database(db.name).Collection("productos")
 	result, err := collection.DeleteOne(db.ctx, bson.M{"_id": p.Id_})

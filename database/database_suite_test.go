@@ -10,8 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var db *database.MongoDb
-
 func TestGoscrapy(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Database test Suite")
@@ -33,7 +31,7 @@ var _ = BeforeSuite(func() {
 
 	var err error
 	// Starting DB connection with a test database
-	db, err = database.Connect(setup.Dburi, setup.Dbuser,
+	_, err = database.Connect(setup.Dburi, setup.Dbuser,
 		setup.Dbpass, "mayorista2", log)
 	if err != nil {
 		log.Panicf("Error database connection %s", err.Error())

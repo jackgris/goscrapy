@@ -34,8 +34,8 @@ func (db *MongoDb) InsertWholesaer(w Wholesalers) error {
 // Reading from database, a product identified with his ID
 func (m *MongoDb) GetWhosalerById(w Wholesalers) Wholesalers {
 
-	collection := db.client.Database(m.name).Collection("provider")
-	r := collection.FindOne(db.ctx, bson.M{"_id": w.Id})
+	collection := Db.client.Database(m.name).Collection("provider")
+	r := collection.FindOne(Db.ctx, bson.M{"_id": w.Id})
 	wholesaler := Wholesalers{}
 	err := r.Decode(&wholesaler)
 
@@ -50,16 +50,16 @@ func (m *MongoDb) GetWhosalerById(w Wholesalers) Wholesalers {
 func (m *MongoDb) FindWholesalers() []Wholesalers {
 
 	whosalers := []Wholesalers{}
-	collection := db.client.Database(db.name).Collection("provider")
+	collection := Db.client.Database(Db.name).Collection("provider")
 	filter := bson.D{}
 	cur, err := collection.Find(m.ctx, filter)
 	if err != nil {
 		m.Log.Info("FindWhosalers getting cursor: ", err)
 		return whosalers
 	}
-	defer cur.Close(db.ctx)
+	defer cur.Close(Db.ctx)
 
-	for cur.Next(db.ctx) {
+	for cur.Next(Db.ctx) {
 		var result Wholesalers
 		err := cur.Decode(&result)
 		if err != nil {
@@ -78,8 +78,8 @@ func (m *MongoDb) FindWholesalers() []Wholesalers {
 // Delete a product from DB, if can't do this, return an error. And will print when not found matchs
 func (m *MongoDb) DeleteWhosaler(w Wholesalers) error {
 
-	collection := db.client.Database(db.name).Collection("provider")
-	result, err := collection.DeleteOne(db.ctx, bson.M{"_id": w.Id})
+	collection := Db.client.Database(Db.name).Collection("provider")
+	result, err := collection.DeleteOne(Db.ctx, bson.M{"_id": w.Id})
 	if result.DeletedCount == 0 {
 		return errors.New("Delete wholesaler not found match")
 	}

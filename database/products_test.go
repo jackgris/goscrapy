@@ -25,12 +25,12 @@ var _ = Describe("Database access for products", func() {
 	Context("Getting all products", func() {
 
 		It("should return the number of product", func() {
-			products := db.ReadByWholesalers("acabajo")
+			products := database.Db.ReadByWholesalers("acabajo")
 			Expect(len(products)).To(Equal(349))
 		})
 
 		It("should return 0 product", func() {
-			products := db.ReadByWholesalers("testing")
+			products := database.Db.ReadByWholesalers("testing")
 			Expect(len(products)).To(Equal(0))
 		})
 
@@ -42,7 +42,7 @@ var _ = Describe("Database access for products", func() {
 			p := database.Product{Id: "1234"}
 			t := database.Product{}
 
-			product := db.ReadById(p)
+			product := database.Db.ReadById(p)
 
 			Expect(product).To(Equal(t))
 		})
@@ -50,7 +50,7 @@ var _ = Describe("Database access for products", func() {
 		It("should return a product", func() {
 			p := database.Product{Id: "https://mayorista.acabajo.com.ar/productos/taza-signos-blanca-con-dorado/"}
 
-			product := db.ReadById(p)
+			product := database.Db.ReadById(p)
 			Expect(product).To(Equal(t))
 		})
 	})
@@ -62,13 +62,13 @@ var _ = Describe("Database access for products", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			p := database.Product{Id_: badId}
-			product := db.ReadByMongoId(p)
+			product := database.Db.ReadByMongoId(p)
 			Expect(product).NotTo(Equal(t))
 		})
 
 		It("should return a product", func() {
 			p := database.Product{Id_: oId}
-			product := db.ReadByMongoId(p)
+			product := database.Db.ReadByMongoId(p)
 			Expect(product).To(Equal(t))
 		})
 	})
@@ -86,27 +86,27 @@ var _ = Describe("Database access for products", func() {
 		})
 
 		It("Saved new product on database", func() {
-			err = db.Create(tProduct)
+			err = database.Db.Create(tProduct)
 			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("Read new product from database", func() {
-			newP := db.ReadByMongoId(database.Product{Id_: newId})
+			newP := database.Db.ReadByMongoId(database.Product{Id_: newId})
 			Expect(newP).To(Equal(tProduct))
 		})
 
 		It("Delete the new product created for test propose", func() {
-			err = db.Delete(database.Product{Id_: newId})
+			err = database.Db.Delete(database.Product{Id_: newId})
 			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("Check new product was deleted correctly", func() {
-			new := db.ReadByMongoId(database.Product{Id_: newId})
+			new := database.Db.ReadByMongoId(database.Product{Id_: newId})
 			Expect(new).To(Equal(database.Product{}))
 		})
 
 		It("Delete not found product", func() {
-			err = db.Delete(database.Product{Id_: newId})
+			err = database.Db.Delete(database.Product{Id_: newId})
 			Expect(err).NotTo(BeNil())
 		})
 

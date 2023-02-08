@@ -25,16 +25,16 @@ var _ = Describe("Database access for wholesalers", func() {
 	Context("Save and delete one wholesaler", func() {
 
 		It("should save one", func() {
-			err := db.InsertWholesaer(wholesaler)
+			err := database.Db.InsertWholesaer(wholesaler)
 			Expect(err).NotTo(HaveOccurred())
 
 		})
 
 		It("should return the whosaler saved", func() {
-			w := db.GetWhosalerById(wholesaler)
+			w := database.Db.GetWhosalerById(wholesaler)
 			Expect(w).To(Equal(wholesaler))
 
-			err := db.DeleteWhosaler(w)
+			err := database.Db.DeleteWhosaler(w)
 			Expect(err).NotTo(HaveOccurred())
 		})
 	})
@@ -50,20 +50,20 @@ var _ = Describe("Database access for wholesalers", func() {
 				w.Id = id
 				wholesalers = append(wholesalers, w)
 
-				err := db.InsertWholesaer(w)
+				err := database.Db.InsertWholesaer(w)
 				Expect(err).NotTo(HaveOccurred())
 			}
 		})
 
 		It("The number of provider should be equal to the amount created", func() {
-			ws := db.FindWholesalers()
+			ws := database.Db.FindWholesalers()
 			Expect(len(ws)).To(Equal(count))
 		})
 
 		It("This need to clean all without errors", func() {
-			wholesalers := db.FindWholesalers()
+			wholesalers := database.Db.FindWholesalers()
 			for _, w := range wholesalers {
-				err := db.DeleteWhosaler(w)
+				err := database.Db.DeleteWhosaler(w)
 				Expect(err).NotTo(HaveOccurred())
 			}
 		})

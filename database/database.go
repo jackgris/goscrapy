@@ -31,7 +31,7 @@ type MongoDb struct {
 // vars needed for only created one instance for my access to the database
 var (
 	once sync.Once
-	db   *MongoDb
+	Db   *MongoDb
 )
 
 // Connecting to the database, only one instance will be create, to connect with mongo database, we need
@@ -41,33 +41,33 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 
 	var err error
 	once.Do(func() {
-		db = new(MongoDb)
-		db.Log = log
+		Db = new(MongoDb)
+		Db.Log = log
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		db.cancel = cancel
-		db.ctx = ctx
+		Db.cancel = cancel
+		Db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
 		credentials := options.Credential{Username: dbuser, Password: dbpass}
 		option.SetAuth(credentials)
 
-		db.client, err = mongo.Connect(db.ctx, option)
+		Db.client, err = mongo.Connect(Db.ctx, option)
 		if err != nil {
 			log.Panicf("Can't connect with db: %s", err.Error())
 		}
-		err = db.client.Ping(db.ctx, readpref.Primary())
+		err = Db.client.Ping(Db.ctx, readpref.Primary())
 
 	})
 
-	db.name = name
+	Db.name = name
 
-	return db, err
+	return Db, err
 }
 
 // Closing the database connection, correctly
 func Disconnect() {
-	db.Log.Warn("Disconnecting from database")
-	defer db.cancel()
-	if err := db.client.Disconnect(db.ctx); err != nil {
-		db.Log.Panicf("Error trying close connection db: %s", err.Error())
+	Db.Log.Warn("Disconnecting from database")
+	defer Db.cancel()
+	if err := Db.client.Disconnect(Db.ctx); err != nil {
+		Db.Log.Panicf("Error trying close connection db: %s", err.Error())
 	}
 }
