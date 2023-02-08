@@ -33,9 +33,6 @@ func main() {
 	defer database.Disconnect()
 
 	app := fiber.New()
-	app.Get("/products/:id", GetProductById)
-	app.Get("/products", GetAllProducts)
-	app.Get("/scraping", Scraper)
-	app.Get("/", Home)
+	app.Route("/", routes, "main")
 	log.Fatal(app.Listen(":3000"))
 }
