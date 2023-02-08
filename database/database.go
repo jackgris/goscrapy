@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"sync"
-	"time"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -43,7 +42,7 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 	once.Do(func() {
 		Db = new(MongoDb)
 		Db.Log = log
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel := context.WithCancel(context.Background())
 		Db.cancel = cancel
 		Db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
