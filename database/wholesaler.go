@@ -9,26 +9,48 @@ import (
 
 type Wholesalers struct {
 	Id         primitive.ObjectID `bson:"_id,omitempty"`
-	Login      string             `bson:"login"`
-	User       string             `bson:"user"`
-	Pass       string             `bson:"pass"`
-	Searchpage string             `bson:"serchpage"`
-	Name       string             `bson:"name"`
+	Login      string             `json:"login" bson:"login"`
+	User       string             `json:"user" bson:"user"`
+	Pass       string             `json:"pass" bson:"pass"`
+	Searchpage string             `json:"searchpage" bson:"searchpage"`
+	Name       string             `json:"name" bson:"name"`
 }
 
 func (db *MongoDb) InsertWholesaer(w Wholesalers) error {
 
 	collection := db.client.Database(db.name).Collection("provider")
-	whosaler := db.GetWhosalerById(w)
+	whosaler := db.GetWhosalerName(w)
 	var err error
 	// If not exist inserted in other case update data
 	if whosaler.Name != w.Name {
 		_, err = collection.InsertOne(db.ctx, w)
 	} else {
+		w.Id = whosaler.Id
 		filter := bson.M{"_id": w.Id}
-		_, err = collection.UpdateOne(db.ctx, filter, w)
+		update := bson.M{"$set": bson.M{
+			"user":       w.User,
+			"pass":       w.Pass,
+			"login":      w.Login,
+			"searchpage": w.Searchpage,
+		}}
+		_, err = collection.UpdateOne(db.ctx, filter, update)
 	}
 	return err
+}
+
+// Reading from database, a product identified with his ID
+func (m *MongoDb) GetWhosalerName(w Wholesalers) Wholesalers {
+
+	collection := Db.client.Database(m.name).Collection("provider")
+	r := collection.FindOne(Db.ctx, bson.M{"name": w.Name})
+	wholesaler := Wholesalers{}
+	err := r.Decode(&wholesaler)
+
+	if err != nil {
+		m.Log.Info("GetWhosalerName cursor: ", err)
+	}
+
+	return wholesaler
 }
 
 // Reading from database, a product identified with his ID

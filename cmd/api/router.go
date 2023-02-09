@@ -6,5 +6,6 @@ func routes(api fiber.Router) {
 	api.Get("/products/:id", GetProductById)
 	api.Get("/products", GetAllProducts)
 	api.Get("/scraping", Scraper)
+	api.Post("/wholesaler", SaveWholesaler)
 	api.Get("/", Home)
 }
