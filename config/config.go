@@ -9,14 +9,16 @@ import (
 )
 
 type Data struct {
-	login      string
-	User       string
-	Pass       string
-	Searchpage string
-	Dburi      string
-	Dbuser     string
-	Dbpass     string
-	NameSaler  string
+	login        string
+	User         string
+	Pass         string
+	Searchpage   string
+	Dburi        string
+	Dbuser       string
+	Dbpass       string
+	NameSaler    string
+	Endphrase    string
+	Endphrasediv string
 }
 
 // Will get all data needed for login on database and web pages
@@ -36,6 +38,8 @@ func Get(path string, log *logrus.Logger) Data {
 	config.Dbuser = os.Getenv("DBUSER")
 	config.Dbpass = os.Getenv("DBPASS")
 	config.NameSaler = os.Getenv("WHOLESALER")
+	config.Endphrase = os.Getenv("ENDPHRASE")
+	config.Endphrasediv = os.Getenv("ENDPHRASEDIV")
 
 	return config
 }
@@ -50,6 +54,8 @@ func GetWholesalersData(config Data, log *logrus.Logger) database.Wholesalers {
 	w.User = config.User
 	w.Pass = config.Pass
 	w.Searchpage = config.Searchpage
+	w.EndPhrase = config.Endphrase
+	w.EndPhraseDiv = config.Endphrasediv
 
 	if w.Login == "" || w.Searchpage == "" {
 		log.Fatal("Can't get search URI for wholesaler")
