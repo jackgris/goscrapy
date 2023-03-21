@@ -12,12 +12,19 @@ import (
 	"time"
 )
 
+type SaveUser interface {
+	Create(p database.Product) error
+}
+
 // GetData will get data from the web of wholesalers, and save that information on the database
-func GetData(db database.Database, w database.Wholesalers, log *logrus.Logger) error {
+func GetData(db SaveUser, w database.Wholesalers, log *logrus.Logger) error {
 
 	// Starting data collector
 	c := colly.NewCollector()
-	err := c.Limit(&colly.LimitRule{Delay: 5 * time.Second})
+	err := c.Limit(&colly.LimitRule{
+		Delay:        5 * time.Second,
+		DomainRegexp: w.Searchpage + "*",
+	})
 	if err != nil {
 		log.Error("Getdata: " + err.Error())
 	}
@@ -41,12 +48,12 @@ func GetData(db database.Database, w database.Wholesalers, log *logrus.Logger) e
 		goquerySelection := e.DOM
 
 		// Check here, there are or there are no products
-		goquerySelection.Find("div.text-center").Each(func(i int, el *goquery.Selection) {
+		goquerySelection.Find(w.EndPhraseDiv).Each(func(i int, el *goquery.Selection) {
 
 			if end {
 				return
 			}
-			not := "No tenemos"
+			not := w.EndPhrase
 			end = strings.Contains(el.Text(), not)
 		})
 
@@ -72,7 +79,7 @@ func GetData(db database.Database, w database.Wholesalers, log *logrus.Logger) e
 					Description: p.Description,
 					Price:       p.Offers.Price,
 					Stock:       p.Offers.InventoryLevel.Stock,
-					Wholesaler:  "acabajo", // FIXME this data, will not be in code
+					Wholesaler:  w.Name,
 				}
 				err := db.Create(product)
 				if err != nil {
@@ -86,7 +93,7 @@ func GetData(db database.Database, w database.Wholesalers, log *logrus.Logger) e
 		log.Println("OnRequest")
 	})
 
-	// FIXME Start scraping change numbers, this's only for tests
+	// Start scraping change numbers, this's only for tests
 	for i := 1; i < 1000; i++ {
 		// Check when there are no products
 		if end {

@@ -8,12 +8,14 @@ import (
 )
 
 type Wholesalers struct {
-	Id         primitive.ObjectID `bson:"_id,omitempty"`
-	Login      string             `json:"login" bson:"login"`
-	User       string             `json:"user" bson:"user"`
-	Pass       string             `json:"pass" bson:"pass"`
-	Searchpage string             `json:"searchpage" bson:"searchpage"`
-	Name       string             `json:"name" bson:"name"`
+	Id           primitive.ObjectID `bson:"_id,omitempty"`
+	Login        string             `json:"login" bson:"login"`
+	User         string             `json:"user" bson:"user"`
+	Pass         string             `json:"pass" bson:"pass"`
+	Searchpage   string             `json:"searchpage" bson:"searchpage"`
+	Name         string             `json:"name" bson:"name"`
+	EndPhrase    string             `json:"endphrase"`
+	EndPhraseDiv string             `json:"endphrasediv"`
 }
 
 func (db *MongoDb) InsertWholesaer(w Wholesalers) error {
@@ -28,10 +30,12 @@ func (db *MongoDb) InsertWholesaer(w Wholesalers) error {
 		w.Id = whosaler.Id
 		filter := bson.M{"_id": w.Id}
 		update := bson.M{"$set": bson.M{
-			"user":       w.User,
-			"pass":       w.Pass,
-			"login":      w.Login,
-			"searchpage": w.Searchpage,
+			"user":         w.User,
+			"pass":         w.Pass,
+			"login":        w.Login,
+			"searchpage":   w.Searchpage,
+			"endphrase":    w.EndPhrase,
+			"endphrasediv": w.EndPhraseDiv,
 		}}
 		_, err = collection.UpdateOne(db.ctx, filter, update)
 	}
