@@ -11,13 +11,14 @@ var _ = Describe("Database access for products", func() {
 
 	oId, err := primitive.ObjectIDFromHex("63d06463b27694842b0af52e")
 	Expect(err).NotTo(HaveOccurred())
+	var prices []database.Value
 	t := database.Product{
 		Id_:         oId,
 		Id:          "https://mayorista.acabajo.com.ar/productos/taza-signos-blanca-con-dorado/",
 		Name:        "Taza Signos Blanca con Dorado",
 		Image:       "https://d2r9epyceweg5n.cloudfront.net/stores/487/927/products/img_39821-f063cf06f84dc3257d16742163260990-480-0.webp",
 		Description: "TAZA LINEA 12 SIGNOS  BLANCA CON DORADO Somos Acabajo, objetos con alma. Diseño y producción argentina de productos artesanales de uso cotidiano, con más de ...",
-		Price:       "0",
+		Price:       prices,
 		Stock:       "0",
 		Wholesaler:  "acabajo",
 	}
