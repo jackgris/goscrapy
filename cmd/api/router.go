@@ -9,5 +9,6 @@ func routes(api fiber.Router) {
 	api.Post("/wholesaler", SaveWholesaler)
 	api.Get("/wholesaler", GetWholesalers)
 	api.Get("/wholesaler/:id", GetWholesaler)
+	api.Post("/wholesaler/:id", UpdateWholesaler)
 	api.Get("/", Home)
 }

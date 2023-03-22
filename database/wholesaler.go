@@ -22,23 +22,36 @@ func (db *MongoDb) InsertWholesaer(w Wholesalers) error {
 
 	collection := db.client.Database(db.name).Collection("provider")
 	whosaler := db.GetWhosalerName(w)
-	var err error
 	// If not exist inserted in other case update data
 	if whosaler.Name != w.Name {
-		_, err = collection.InsertOne(db.ctx, w)
-	} else {
-		w.Id = whosaler.Id
-		filter := bson.M{"_id": w.Id}
-		update := bson.M{"$set": bson.M{
-			"user":         w.User,
-			"pass":         w.Pass,
-			"login":        w.Login,
-			"searchpage":   w.Searchpage,
-			"endphrase":    w.EndPhrase,
-			"endphrasediv": w.EndPhraseDiv,
-		}}
-		_, err = collection.UpdateOne(db.ctx, filter, update)
+		_, err := collection.InsertOne(db.ctx, w)
+		return err
 	}
+	w.Id = whosaler.Id
+	return db.updateWholesaler(w)
+}
+
+func (db *MongoDb) UpdateWholesaler(w Wholesalers) error {
+
+	whosaler := db.GetWhosalerName(w)
+	if whosaler.Name != w.Name {
+		return errors.New(w.Name + " wholesaler don't exist")
+	}
+	return db.updateWholesaler(w)
+}
+
+func (db *MongoDb) updateWholesaler(w Wholesalers) error {
+	collection := db.client.Database(db.name).Collection("provider")
+	filter := bson.M{"_id": w.Id}
+	update := bson.M{"$set": bson.M{
+		"user":         w.User,
+		"pass":         w.Pass,
+		"login":        w.Login,
+		"searchpage":   w.Searchpage,
+		"endphrase":    w.EndPhrase,
+		"endphrasediv": w.EndPhraseDiv,
+	}}
+	_, err := collection.UpdateOne(db.ctx, filter, update)
 	return err
 }
 

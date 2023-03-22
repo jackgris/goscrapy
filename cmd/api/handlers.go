@@ -80,6 +80,26 @@ func GetWholesalers(c *fiber.Ctx) error {
 	return c.JSON(wholesalers)
 }
 
+func UpdateWholesaler(c *fiber.Ctx) error {
+
+	var ws database.Wholesalers
+	if err := c.BodyParser(&ws); err != nil {
+		database.Db.Log.Warn("UpdateWholesaler:", err)
+		return c.Status(http.StatusBadRequest).SendString("Bad request")
+	}
+
+	if ok := checkWSaler(ws); !ok {
+		database.Db.Log.Warn("UpdateWholesaler:", err)
+		return c.Status(http.StatusNotAcceptable).SendString("Incomplete data")
+	}
+	if err := database.Db.UpdateWholesaler(ws); err != nil {
+		database.Db.Log.Warn("UpdateWholesaler:", err)
+		return c.Status(http.StatusInternalServerError).SendString("Can't saved entity")
+	}
+
+	return c.Status(http.StatusOK).SendString("All is right")
+}
+
 func checkWSaler(ws database.Wholesalers) (ok bool) {
 	ok = true
 	if ws.Login == "" || ws.Pass == "" || ws.Name == "" || ws.Searchpage == "" || ws.User == "" {
