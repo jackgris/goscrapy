@@ -11,7 +11,7 @@ import (
 )
 
 func Home(c *fiber.Ctx) error {
-	database.Db.Log.Info("Until now, this is only for test propuse")
+	database.Db.Log.Info("Until now, this is only for test propuse. Need create an html template.")
 	r := struct{ Message string }{Message: "THIS HOME"}
 	return c.JSON(r)
 }
@@ -58,6 +58,26 @@ func SaveWholesaler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).SendString("All is right")
+}
+
+func GetWholesaler(c *fiber.Ctx) error {
+
+	var wholesaler database.Wholesalers
+	id := c.Params("id")
+	oId, _ := primitive.ObjectIDFromHex(id)
+	w := database.Wholesalers{Id: oId}
+	wholesaler = database.Db.GetWhosalerById(w)
+	empty, _ := primitive.ObjectIDFromHex("000000000000000000000000")
+	if wholesaler.Id == empty {
+		r := struct{ Message string }{Message: "BAD ID"}
+		return c.JSON(r)
+	}
+	return c.JSON(wholesaler)
+}
+
+func GetWholesalers(c *fiber.Ctx) error {
+	wholesalers := database.Db.FindWholesalers()
+	return c.JSON(wholesalers)
 }
 
 func checkWSaler(ws database.Wholesalers) (ok bool) {
