@@ -70,20 +70,28 @@ func GetData(db SaveUser, w database.Wholesalers, log *logrus.Logger) error {
 
 			// Is data is ok, saving product on database
 			if p.MainEntity.Id != "" {
-				// saving data here
-				//saveData(collection, ctx, p)
-				product := database.Product{
-					Id:          p.MainEntity.Id,
-					Name:        p.Name,
-					Image:       p.Image,
-					Description: p.Description,
-					Price:       p.Offers.Price,
-					Stock:       p.Offers.InventoryLevel.Stock,
-					Wholesaler:  w.Name,
-				}
-				err := db.Create(product)
+				price, err := strconv.ParseFloat(p.Offers.Price, 64)
 				if err != nil {
-					log.Warn("Can´t save product: ", err)
+					log.Warn("Error parsing price: ", err)
+				} else {
+					var value database.Value
+					value.Date = time.Now()
+					value.Price = price
+					values := []database.Value{value}
+
+					product := database.Product{
+						Id:          p.MainEntity.Id,
+						Name:        p.Name,
+						Image:       p.Image,
+						Description: p.Description,
+						Price:       values,
+						Stock:       p.Offers.InventoryLevel.Stock,
+						Wholesaler:  w.Name,
+					}
+					err = db.Create(product)
+					if err != nil {
+						log.Warn("Can´t save product: ", err)
+					}
 				}
 			}
 		})

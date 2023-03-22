@@ -56,6 +56,7 @@ func GetWholesalersData(config Data, log *logrus.Logger) database.Wholesalers {
 	w.Searchpage = config.Searchpage
 	w.EndPhrase = config.Endphrase
 	w.EndPhraseDiv = config.Endphrasediv
+	w.Name = config.NameSaler
 
 	if w.Login == "" || w.Searchpage == "" {
 		log.Fatal("Can't get search URI for wholesaler")

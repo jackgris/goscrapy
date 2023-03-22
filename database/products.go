@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -10,13 +11,18 @@ import (
 // Data product needed, not mather what wholesaler get data
 type Product struct {
 	Id_         primitive.ObjectID `bson:"_id,omitempty"`
-	Id          string
-	Name        string
+	Id          string             `bson:"id,omitempty"`
+	Name        string             `bson:"name,omitempty"`
 	Image       string
 	Description string
-	Price       string
+	Price       []Value `bson:"prices,omitempty"`
 	Stock       string
 	Wholesaler  string
+}
+
+type Value struct {
+	Price float64   `bson:"price,omitempty"`
+	Date  time.Time `bson:"date,omitempty"`
 }
 
 // Inserting product in the database, only when is a new product or when price change,
@@ -26,13 +32,34 @@ func (db *MongoDb) Create(p Product) error {
 	collection := db.client.Database(db.name).Collection("productos")
 	product := db.ReadById(p)
 	var err error
-	if product.Id != "" {
-		if product.Price != p.Price {
-			_, err = collection.InsertOne(db.ctx, p)
-		}
-	} else {
+	// If product doesn't exist, insert a new one, but if exist only update prices
+	if product.Id == "" {
 		_, err = collection.InsertOne(db.ctx, p)
+	} else {
+		// update only if last price are different
+		if product.Price[len(product.Price)-1].Price != p.Price[len(p.Price)-1].Price {
+			products := product.Price
+			products = append(products, p.Price[len(p.Price)-1])
+			product.Price = products
+			err = db.updateProduct(product)
+		}
 	}
+	return err
+}
+
+func (db *MongoDb) updateProduct(p Product) error {
+	collection := db.client.Database(db.name).Collection("productos")
+	filter := bson.M{"_id": p.Id_}
+	update := bson.M{"$set": bson.M{
+		"id":          p.Id,
+		"name":        p.Name,
+		"image":       p.Image,
+		"description": p.Description,
+		"prices":      p.Price,
+		"stock":       p.Stock,
+		"wholesaler":  p.Wholesaler,
+	}}
+	_, err := collection.UpdateOne(db.ctx, filter, update)
 	return err
 }
 
@@ -41,7 +68,7 @@ func (db *MongoDb) ReadById(p Product) Product {
 
 	collection := db.client.Database(db.name).Collection("productos")
 	r := collection.FindOne(db.ctx, bson.M{"id": p.Id})
-	product := Product{}
+	var product Product
 	err := r.Decode(&product)
 
 	if err != nil {
