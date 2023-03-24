@@ -1,6 +1,11 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"sync"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackgris/goscrapy/config"
 	"github.com/jackgris/goscrapy/database"
@@ -33,6 +38,27 @@ func main() {
 	defer database.Disconnect()
 
 	app := fiber.New()
+
+	// Will wait for signal interrupt, to wait for a while and clean all the pending tasks.
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
+	var serverShutdown sync.WaitGroup
+
+	go func() {
+		<-c
+		log.Warn("Gracefully shutting down...")
+		serverShutdown.Add(1)
+		defer serverShutdown.Done()
+		_ = app.ShutdownWithTimeout(60 * time.Second)
+	}()
+
 	app.Route("/", routes, "main")
-	log.Fatal(app.Listen(":3000"))
+	if err := app.Listen(":3000"); err != nil {
+		log.Fatal(err)
+	}
+
+	// Waiting for start shutting down
+	serverShutdown.Wait()
+	log.Warn("Running cleanup tasks...")
 }
