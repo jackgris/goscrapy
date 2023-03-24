@@ -69,11 +69,9 @@ func (db *MongoDb) ReadById(p Product) Product {
 	collection := db.client.Database(db.name).Collection("productos")
 	r := collection.FindOne(db.ctx, bson.M{"id": p.Id})
 	var product Product
-	err := r.Decode(&product)
-
-	if err != nil {
-		db.Log.Info("ReadById cursor: ", err)
-	}
+	// If can't decode data, means that doesn't exist that product.
+	// So can ignored the error because we'll return an empty product.
+	_ = r.Decode(&product)
 
 	return product
 }
