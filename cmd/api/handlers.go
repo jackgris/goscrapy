@@ -58,7 +58,11 @@ func Scraper(c *fiber.Ctx) error {
 		}(wholesaler)
 	}
 	wg.Wait()
-	return err
+
+	// Finish scrape all wholesaler without any problem.
+	database.Db.Log.Warn("Scrape finished")
+
+	return c.Status(http.StatusOK).SendString("All done")
 }
 
 func SaveWholesaler(c *fiber.Ctx) error {
