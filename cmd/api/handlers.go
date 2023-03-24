@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"sync"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackgris/goscrapy/config"
@@ -35,8 +36,28 @@ func GetAllProducts(c *fiber.Ctx) error {
 }
 
 func Scraper(c *fiber.Ctx) error {
-	// Getting and saving data
-	err := data.GetData(database.Db, config.GetWholesalersData(setup, database.Db.Log), database.Db.Log)
+	// Get all the wholesalers save in database.
+	wholesalers := database.Db.FindWholesalers()
+
+	// If don't have any wholesaler saved in our database, we can try use data from a config file.
+	if len(wholesalers) == 0 {
+		wholesalers = append(wholesalers, config.GetWholesalersData(setup, database.Db.Log))
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(len(wholesalers))
+
+	// Getting and saving all product data from all wholesaler running in parallel.
+	for _, wholesaler := range wholesalers {
+		go func(w database.Wholesalers) {
+			defer wg.Done()
+			err := data.GetData(database.Db, w, database.Db.Log)
+			if err != nil {
+				database.Db.Log.Fatal(err)
+			}
+		}(wholesaler)
+	}
+	wg.Wait()
 	return err
 }
 

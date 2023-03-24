@@ -34,8 +34,12 @@ CLOSED: [2023-01-27 Fri 20:42]
 CLOSED: [2023-01-30 Mon 20:35]
 *** DONE save wholesalers data
 CLOSED: [2023-03-21 Tue 21:26]
-*** TODO save products with price info and wholesaler
-*** TODO update products, save new price and date
+*** DONE save products with price info and wholesaler
+CLOSED: [2023-03-24 Fri 19:31]
+*** DONE update products, save new price and date
+CLOSED: [2023-03-24 Fri 19:31]
+*** DONE get data from wholesaler web site, all at same time in parallel
+CLOSED: [2023-03-24 Fri 19:32]
 *** TODO get all prices changes through time
 *** TODO search product by name or other data
 *** TODO automate billing of a business, using ID of sales
