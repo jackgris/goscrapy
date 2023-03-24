@@ -97,9 +97,7 @@ func GetData(db SaveUser, w database.Wholesalers, log *logrus.Logger) error {
 		})
 	})
 
-	c.OnRequest(func(r *colly.Request) {
-		log.Println("OnRequest")
-	})
+	c.OnRequest(func(r *colly.Request) {})
 
 	// Start scraping change numbers, this's only for tests
 	for i := 1; i < 1000; i++ {
