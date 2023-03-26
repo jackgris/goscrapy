@@ -140,3 +140,23 @@ func checkWSaler(ws database.Wholesalers) (ok bool) {
 	}
 	return ok
 }
+
+func ShowSameProducts(c *fiber.Ctx) error {
+
+	// Get all products saved in our database.
+	products := database.Db.GetAllProducts()
+	var result [][]database.Product
+	for _, p := range products {
+
+		// Clean from the list products from the same owner.
+		if p.Wholesaler == setup.NameSaler {
+
+			// And only add result with at least one match.
+			r := database.Db.SearchSimilars(p)
+			if len(r) > 1 {
+				result = append(result, r)
+			}
+		}
+	}
+	return c.JSON(result)
+}
