@@ -6,6 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Data product needed, not mather what wholesaler get data
@@ -120,6 +121,35 @@ func (db *MongoDb) ReadByWholesalers(name string) []Product {
 	return products
 }
 
+// GetAllProducts return all products from database
+func (db *MongoDb) GetAllProducts() []Product {
+
+	products := []Product{}
+	collection := db.client.Database(db.name).Collection("productos")
+	filter := bson.M{}
+	cur, err := collection.Find(db.ctx, filter)
+	if err != nil {
+		db.Log.Info("GetAllProducts getting cursor: ", err)
+		return products
+	}
+	defer cur.Close(db.ctx)
+
+	for cur.Next(db.ctx) {
+		var result Product
+		err := cur.Decode(&result)
+		if err != nil {
+			db.Log.Info("GetAllProducts decode bson: ", err)
+		}
+
+		products = append(products, result)
+	}
+
+	if err := cur.Err(); err != nil {
+		db.Log.Info("GetAllProducts cursor: ", err)
+	}
+	return products
+}
+
 // Delete a product from DB, if can't do this, return an error. And will print when not found matchs
 func (db *MongoDb) Delete(p Product) error {
 
@@ -132,4 +162,25 @@ func (db *MongoDb) Delete(p Product) error {
 		return errors.New("Delete found many matchs")
 	}
 	return err
+}
+
+func (db *MongoDb) SearchSimilars(p Product) []Product {
+
+	var results []Product
+	filter := bson.M{"name": primitive.Regex{Pattern: p.Name, Options: "i"}}
+	collection := db.client.Database(db.name).Collection("productos")
+	cursor, err := collection.Find(db.ctx, filter, options.Find().SetProjection(bson.M{"_id": 0}))
+	if err != nil {
+		db.Log.Warn("SeachSimilars ", err)
+		return results
+	}
+
+	if err = cursor.All(db.ctx, &results); err != nil {
+		db.Log.Warn("SeachSimilars ", err)
+	}
+	if len(results) <= 0 {
+		db.Log.Warn("SearchSimilars not match anyone")
+	}
+
+	return results
 }
