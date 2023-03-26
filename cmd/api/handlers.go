@@ -30,6 +30,13 @@ func GetProductById(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+func GetProductsByWholesaler(c *fiber.Ctx) error {
+	name := c.Params("wholesaler")
+	products := database.Db.ReadByWholesalers(name)
+
+	return c.JSON(products)
+}
+
 func GetAllProducts(c *fiber.Ctx) error {
 	products := database.Db.GetAllProducts()
 
