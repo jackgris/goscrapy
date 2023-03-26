@@ -40,10 +40,11 @@ CLOSED: [2023-03-24 Fri 19:31]
 CLOSED: [2023-03-24 Fri 19:31]
 *** DONE get data from wholesaler web site, all at same time in parallel
 CLOSED: [2023-03-24 Fri 19:32]
+*** DONE gracefully shutdown
+CLOSED: [2023-03-24 Fri 20:17]
 *** TODO get all prices changes through time
 *** TODO search product by name or other data
 *** TODO automate billing of a business, using ID of sales
-*** TODO gracefully shutdown
 
 * Consume info
 ** create front-ends (we will use React only with the propose of test somethings)

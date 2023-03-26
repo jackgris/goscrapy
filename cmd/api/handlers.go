@@ -31,7 +31,8 @@ func GetProductById(c *fiber.Ctx) error {
 }
 
 func GetAllProducts(c *fiber.Ctx) error {
-	products := database.Db.ReadByWholesalers(setup.NameSaler)
+	products := database.Db.GetAllProducts()
+
 	return c.JSON(products)
 }
 
