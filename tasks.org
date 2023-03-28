@@ -23,6 +23,8 @@ CLOSED: [2023-01-30 Mon 19:59]
 CLOSED: [2023-02-01 Wed 20:48]
 *** DONE create a collection for every wholesaler
 CLOSED: [2023-02-05 Sun 19:49]
+*** TODO Save data from CSV files in the database, to compare the prices of products at the time they were purchased with current prices.
+
 
 * API
 ** Create endpoints for:

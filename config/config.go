@@ -19,6 +19,7 @@ type Data struct {
 	NameSaler    string
 	Endphrase    string
 	Endphrasediv string
+	Wholesalers  []string
 }
 
 // Will get all data needed for login on database and web pages
@@ -29,6 +30,8 @@ func Get(path string, log *logrus.Logger) Data {
 	if err != nil {
 		log.Fatal("Error loading config file")
 	}
+	wholesalers := getNameFilesConfig(log)
+
 	config := Data{}
 	config.login = os.Getenv("LOGIN")
 	config.User = os.Getenv("USER")
@@ -40,6 +43,7 @@ func Get(path string, log *logrus.Logger) Data {
 	config.NameSaler = os.Getenv("WHOLESALER")
 	config.Endphrase = os.Getenv("ENDPHRASE")
 	config.Endphrasediv = os.Getenv("ENDPHRASEDIV")
+	config.Wholesalers = wholesalers
 
 	return config
 }
@@ -63,4 +67,21 @@ func GetWholesalersData(config Data, log *logrus.Logger) database.Wholesalers {
 	}
 
 	return w
+}
+
+func getNameFilesConfig(log *logrus.Logger) []string {
+	entries, err := os.ReadDir("../../data/csv")
+	if err != nil {
+		log.Fatalf("Can't files from config folder %s", err)
+	}
+	var names []string
+	for _, entry := range entries {
+		info, err := entry.Info()
+		if err != nil {
+			log.Fatalf("Error whiles reading files %s", err)
+		}
+		names = append(names, info.Name())
+	}
+
+	return names
 }
