@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/jackgris/goscrapy/database"
 )
@@ -30,9 +31,11 @@ func ReadCSV(path string) []database.Product {
 		}
 
 		if len(record) > 1 {
-			price, err := strconv.ParseFloat(record[4], 64)
+			number := record[4]
+			number = strings.ReplaceAll(number, ",", ".")
+			price, err := strconv.ParseFloat(number, 64)
 			if err != nil {
-				log.Println(err)
+				log.Println("ReadCSV: ", err)
 			} else {
 				prices := []database.Value{}
 				value := database.Value{
