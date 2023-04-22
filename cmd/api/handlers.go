@@ -160,3 +160,44 @@ func ShowSameProducts(c *fiber.Ctx) error {
 	}
 	return c.JSON(result)
 }
+
+func ComparePricesSameWholesaler(c *fiber.Ctx) error {
+	name := c.Params("wholesaler")
+	products := data.ReadCSV("./data/csv/" + name + ".csv")
+	var result []PriceCompared
+	for _, p := range products {
+		r := database.Db.SearchSimilars(p)
+		if len(r) > 1 {
+			list := []PriceWeb{}
+			for _, webP := range r {
+				web := PriceWeb{
+					Name:  webP.Name,
+					Price: webP.Price[len(webP.Price)-1].Price,
+					Owner: webP.Wholesaler,
+				}
+				list = append(list, web)
+			}
+
+			pC := PriceCompared{
+				Name:  p.Name,
+				Price: p.Price[len(p.Price)-1].Price,
+				Webs:  list,
+			}
+			result = append(result, pC)
+		}
+	}
+
+	return c.JSON(result)
+}
+
+type PriceCompared struct {
+	Name  string
+	Price float64
+	Webs  []PriceWeb
+}
+
+type PriceWeb struct {
+	Name  string
+	Price float64
+	Owner string
+}

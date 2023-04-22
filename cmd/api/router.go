@@ -8,6 +8,7 @@ func routes(api fiber.Router) {
 	api.Get("/products", GetAllProducts)
 	api.Get("/scraping", Scraper)
 	api.Get("/similars", ShowSameProducts)
+	api.Get("/compare/:wholesaler", ComparePricesSameWholesaler)
 	api.Post("/wholesaler", SaveWholesaler)
 	api.Get("/wholesaler", GetWholesalers)
 	api.Get("/wholesaler/:id", GetWholesaler)

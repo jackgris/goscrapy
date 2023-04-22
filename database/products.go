@@ -178,9 +178,5 @@ func (db *MongoDb) SearchSimilars(p Product) []Product {
 	if err = cursor.All(db.ctx, &results); err != nil {
 		db.Log.Warn("SeachSimilars ", err)
 	}
-	if len(results) <= 0 {
-		db.Log.Warn("SearchSimilars not match anyone")
-	}
-
 	return results
 }
