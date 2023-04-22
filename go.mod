@@ -9,7 +9,6 @@ require (
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/gofiber/fiber/v2 v2.41.0
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/pprof v0.0.0-20230131232505-5a9e8f65f08f // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/montanaflynn/stats v0.7.0 // indirect

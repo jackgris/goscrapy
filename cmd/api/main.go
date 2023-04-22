@@ -26,7 +26,7 @@ func main() {
 	})
 
 	// Getting all config needed for connections and pages login
-	setup = config.Get("../../data.env", log)
+	setup = config.Get("data.env", log)
 
 	// Starting DB connection
 	_, err = database.Connect(setup.Dburi, setup.Dbuser,

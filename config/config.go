@@ -70,7 +70,7 @@ func GetWholesalersData(config Data, log *logrus.Logger) database.Wholesalers {
 }
 
 func getNameFilesConfig(log *logrus.Logger) []string {
-	entries, err := os.ReadDir("../../data/csv")
+	entries, err := os.ReadDir("data/csv")
 	if err != nil {
 		log.Fatalf("Can't files from config folder %s", err)
 	}
