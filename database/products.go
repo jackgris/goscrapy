@@ -180,3 +180,19 @@ func (db *MongoDb) SearchSimilars(p Product) []Product {
 	}
 	return results
 }
+
+func (db *MongoDb) SearchByName(p Product) []Product {
+	var results []Product
+	filter := bson.M{"name": p.Name}
+	collection := db.client.Database(db.name).Collection("productos")
+	cursor, err := collection.Find(db.ctx, filter)
+	if err != nil {
+		db.Log.Warn("SearchByName ", err)
+		return results
+	}
+
+	if err = cursor.All(db.ctx, &results); err != nil {
+		db.Log.Warn("SearchByName ", err)
+	}
+	return results
+}

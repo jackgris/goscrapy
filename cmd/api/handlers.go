@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 	"sync"
 
 	"github.com/gofiber/fiber/v2"
@@ -166,8 +167,8 @@ func ComparePricesSameWholesaler(c *fiber.Ctx) error {
 	products := data.ReadCSV("./data/csv/" + name + ".csv")
 	var result []PriceCompared
 	for _, p := range products {
-		r := database.Db.SearchSimilars(p)
-		if len(r) > 1 {
+		r := database.Db.SearchByName(p)
+		if len(r) >= 1 {
 			list := []PriceWeb{}
 			for _, webP := range r {
 				web := PriceWeb{
@@ -183,7 +184,58 @@ func ComparePricesSameWholesaler(c *fiber.Ctx) error {
 				Price: p.Price[len(p.Price)-1].Price,
 				Webs:  list,
 			}
+
+			if pC.Price < pC.Webs[len(pC.Webs)-1].Price {
+				database.Db.Log.Warnf("Need update price of %s actual prices %v and new is %v.",
+					pC.Name, pC.Price, pC.Webs[len(pC.Webs)-1].Price)
+			}
+
 			result = append(result, pC)
+		}
+	}
+
+	return c.JSON(result)
+}
+
+func NeedUpdatePricesSameWholesaler(c *fiber.Ctx) error {
+	name := c.Params("wholesaler")
+	discount := c.Params("discount", "")
+	percentage := float64(1)
+
+	num, err := strconv.ParseFloat(discount, 64)
+
+	if err == nil && num != 0 {
+		num = num / 100
+		percentage -= num
+	}
+
+	products := data.ReadCSV("./data/csv/" + name + ".csv")
+	var result []PriceCompared
+	for _, p := range products {
+		r := database.Db.SearchByName(p)
+		if len(r) >= 1 {
+			list := []PriceWeb{}
+			for _, webP := range r {
+				web := PriceWeb{
+					Name:  webP.Name,
+					Price: webP.Price[len(webP.Price)-1].Price * percentage,
+					Owner: webP.Wholesaler,
+				}
+				list = append(list, web)
+			}
+
+			pC := PriceCompared{
+				Name:  p.Name,
+				Price: p.Price[len(p.Price)-1].Price,
+				Webs:  list,
+			}
+
+			if pC.Price < pC.Webs[len(pC.Webs)-1].Price {
+				database.Db.Log.Warnf("Need update price of %s actual prices %v and new is %v.",
+					pC.Name, pC.Price, pC.Webs[len(pC.Webs)-1].Price)
+
+				result = append(result, pC)
+			}
 		}
 	}
 
