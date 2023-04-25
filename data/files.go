@@ -13,13 +13,14 @@ import (
 
 func ReadCSV(path string) []database.Product {
 
+	var products []database.Product
+
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("ReadCSV: ", err)
+		return products
 	}
 	r := csv.NewReader(file)
-
-	var products []database.Product
 
 	for {
 		record, err := r.Read()
@@ -27,7 +28,7 @@ func ReadCSV(path string) []database.Product {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Println("ReadCSV, while try to a read rows: ", err)
 		}
 
 		if len(record) > 1 {
