@@ -44,8 +44,10 @@ CLOSED: [2023-03-24 Fri 19:31]
 CLOSED: [2023-03-24 Fri 19:32]
 *** DONE gracefully shutdown
 CLOSED: [2023-03-24 Fri 20:17]
+*** DONE search product by name or other data
+CLOSED: [2023-04-24 Mon 21:59]
+*** TODO download csv files from Google Drive saved
 *** TODO get all prices changes through time
-*** TODO search product by name or other data
 *** TODO automate billing of a business, using ID of sales
 
 * Consume info
@@ -56,7 +58,8 @@ CLOSED: [2023-03-24 Fri 20:17]
 **** TODO add sales
 
 *** consulting data
-**** TODO see all products and prices
+**** DONE see all products and prices
+CLOSED: [2023-04-24 Mon 22:00]
 **** TODO compare prices of same product at different periods of time
 **** TODO make petition to update data products
 **** TODO show percentage of change prices (selecting one data and compare with the actual price)
@@ -69,3 +72,7 @@ CLOSED: [2023-02-08 Wed 19:23]
 CLOSED: [2023-02-08 Wed 19:24]
 **** DONE change to logrus library
 CLOSED: [2023-02-07 Tue 21:08]
+*** TODO refactor: manage in a better way logs
+*** TODO refactor: folder data is not right
+*** TODO add comments (in a near future will be hard work, is really bad practice on every side project)
+*** TODO add test, code coverage now is really bad
