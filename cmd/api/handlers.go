@@ -164,7 +164,7 @@ func ShowSameProducts(c *fiber.Ctx) error {
 
 func ComparePricesSameWholesaler(c *fiber.Ctx) error {
 	name := c.Params("wholesaler")
-	products := data.ReadCSV("./data/csv/" + name + ".csv")
+	products := data.ReadCSV("./data/csv/"+name+".csv", database.Db.Log)
 	var result []PriceCompared
 	for _, p := range products {
 		r := database.Db.SearchByName(p)
@@ -209,7 +209,7 @@ func NeedUpdatePricesSameWholesaler(c *fiber.Ctx) error {
 		percentage -= num
 	}
 
-	products := data.ReadCSV("./data/csv/" + name + ".csv")
+	products := data.ReadCSV("./data/csv/"+name+".csv", database.Db.Log)
 	var result []PriceCompared
 	for _, p := range products {
 		r := database.Db.SearchByName(p)
@@ -240,6 +240,13 @@ func NeedUpdatePricesSameWholesaler(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(result)
+}
+
+func CreateXlsxFile(c *fiber.Ctx) error {
+	products := database.Db.GetAllProducts()
+	data.WriteXlsx(".", database.Db.Log, products)
+
+	return nil
 }
 
 type PriceCompared struct {
