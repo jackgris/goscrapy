@@ -20,9 +20,9 @@ require (
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
+	github.com/xuri/excelize/v2 v2.7.1
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mongodb.org/mongo-driver v1.11.1
-	golang.org/x/crypto v0.5.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
