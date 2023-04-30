@@ -56,7 +56,7 @@ func ReadCSV(path string, log *logrus.Logger) []database.Product {
 	return products
 }
 
-func WriteXlsx(path string, log *logrus.Logger, products []database.Product) {
+func WriteXlsx(path string, log *logrus.Logger, products []database.Product) string {
 	f := excelize.NewFile()
 	defer func() {
 		if err := f.Close(); err != nil {
@@ -67,7 +67,7 @@ func WriteXlsx(path string, log *logrus.Logger, products []database.Product) {
 	index, err := f.NewSheet("prices_to_update")
 	if err != nil {
 		log.Println(err)
-		return
+		return ""
 	}
 	// Set value of a cell.
 	_ = f.SetCellValue("prices_to_update", "A1", "Name")
@@ -99,4 +99,6 @@ func WriteXlsx(path string, log *logrus.Logger, products []database.Product) {
 	if err := f.SaveAs("NewPrices.xlsx"); err != nil {
 		log.Println("WriteXlsx, while saved file occur: ", err)
 	}
+
+	return f.Path
 }

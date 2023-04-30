@@ -244,8 +244,12 @@ func NeedUpdatePricesSameWholesaler(c *fiber.Ctx) error {
 
 func CreateXlsxFile(c *fiber.Ctx) error {
 	products := database.Db.GetAllProducts()
-	data.WriteXlsx(".", database.Db.Log, products)
-
+	path := data.WriteXlsx(".", database.Db.Log, products)
+	if path != "" {
+		c.Attachment("./NewPrices.xlsx")
+		return c.SendFile(path)
+	}
+	database.Db.Log.Warn("Can't return xlsx file")
 	return nil
 }
 
