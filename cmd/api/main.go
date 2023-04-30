@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackgris/goscrapy/config"
 	"github.com/jackgris/goscrapy/database"
 	"github.com/sirupsen/logrus"
@@ -38,6 +39,9 @@ func main() {
 	defer database.Disconnect()
 
 	app := fiber.New()
+
+	// Initialize default config
+	app.Use(logger.New())
 
 	// Will wait for signal interrupt, to wait for a while and clean all the pending tasks.
 	c := make(chan os.Signal, 1)

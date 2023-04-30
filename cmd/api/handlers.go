@@ -13,8 +13,8 @@ import (
 )
 
 func Home(c *fiber.Ctx) error {
-	database.Db.Log.Info("Until now, this is only for test propuse. Need create an html template.")
 	r := struct{ Message string }{Message: "THIS HOME"}
+	c.Status(http.StatusOK)
 	return c.JSON(r)
 }
 
