@@ -24,8 +24,6 @@ type Config struct {
 func Routes(app *fiber.App, cfg Config) {
 
 	const version = "v1"
-	setup := config.Get("data.env", cfg.Log)
-	cfg.Setup = &setup
 
 	app.Route("/", routes(version, cfg), "main")
 }

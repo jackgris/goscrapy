@@ -8,6 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	v1 "github.com/jackgris/goscrapy/cmd/api/handlers/v1"
 	"github.com/jackgris/goscrapy/config"
 	"github.com/jackgris/goscrapy/database"
 	"github.com/sirupsen/logrus"
@@ -30,7 +31,7 @@ func main() {
 	setup = config.Get("data.env", log)
 
 	// Starting DB connection
-	_, err = database.Connect(setup.Dburi, setup.Dbuser,
+	db, err := database.Connect(setup.Dburi, setup.Dbuser,
 		setup.Dbpass, "mayorista", log)
 
 	if err != nil {
@@ -60,7 +61,14 @@ func main() {
 		_ = app.ShutdownWithTimeout(60 * time.Second)
 	}()
 
-	app.Route("/", routes, "main")
+	cfg := v1.Config{
+		Log:   log,
+		Db:    db,
+		Setup: &setup,
+	}
+
+	v1.Routes(app, cfg)
+
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)
 	}
