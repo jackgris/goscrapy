@@ -14,9 +14,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var err error
-var setup config.Data
-
 func main() {
 	log := logrus.New()
 	log.SetLevel(logrus.InfoLevel)
@@ -28,7 +25,7 @@ func main() {
 	})
 
 	// Getting all config needed for connections and pages login
-	setup = config.Get("data.env", log)
+	setup := config.Get("data.env", log)
 
 	// Starting DB connection
 	db, err := database.Connect(setup.Dburi, setup.Dbuser,
@@ -43,8 +40,7 @@ func main() {
 
 	// Initialize default config
 	conf := logger.ConfigDefault
-	conf.Format = "${time} | ${status} | ${latency} | IP ${ip}  | Method  ${method}| Route ${path}\nResponse: ${resBody}\n"
-	// 13:54:41 | 200 |    81ms |       127.0.0.1 | GET     | /spreadsheet
+	conf.Format = "${time} | ${status} | ${latency} | IP ${ip}  | Method  ${method}| Route ${path} Error: ${error}\n"
 	app.Use(logger.New(conf))
 
 	// Will wait for signal interrupt, to wait for a while and clean all the pending tasks.
@@ -67,7 +63,7 @@ func main() {
 		Setup: &setup,
 	}
 
-	v1.Routes(app, cfg)
+	app.Route("/", v1.Routes(app, cfg), "main")
 
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)

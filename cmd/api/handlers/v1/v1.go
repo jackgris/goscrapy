@@ -21,11 +21,11 @@ type Config struct {
 }
 
 // Routes binds all the version 1 routes.
-func Routes(app *fiber.App, cfg Config) {
+func Routes(app *fiber.App, cfg Config) func(routes fiber.Router) {
 
 	const version = "v1"
 
-	app.Route("/", routes(version, cfg), "main")
+	return routes(version, cfg)
 }
 
 // routes return the function to setup routes in Fiber
