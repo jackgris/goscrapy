@@ -41,7 +41,10 @@ func main() {
 	app := fiber.New()
 
 	// Initialize default config
-	app.Use(logger.New())
+	conf := logger.ConfigDefault
+	conf.Format = "${time} | ${status} | ${latency} | IP ${ip}  | Method  ${method}| Route ${path}\nResponse: ${resBody}\n"
+	// 13:54:41 | 200 |    81ms |       127.0.0.1 | GET     | /spreadsheet
+	app.Use(logger.New(conf))
 
 	// Will wait for signal interrupt, to wait for a while and clean all the pending tasks.
 	c := make(chan os.Signal, 1)
