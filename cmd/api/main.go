@@ -11,18 +11,11 @@ import (
 	v1 "github.com/jackgris/goscrapy/cmd/api/handlers/v1"
 	"github.com/jackgris/goscrapy/config"
 	"github.com/jackgris/goscrapy/database"
-	"github.com/sirupsen/logrus"
+	logs "github.com/jackgris/goscrapy/foundation/logger"
 )
 
 func main() {
-	log := logrus.New()
-	log.SetLevel(logrus.InfoLevel)
-	log.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp:          true,
-		TimestampFormat:        "2006-01-02 15:04:05",
-		ForceColors:            true,
-		DisableLevelTruncation: true,
-	})
+	log := logs.New()
 
 	// Getting all config needed for connections and pages login
 	setup := config.Get("data.env", log)
