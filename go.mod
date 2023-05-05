@@ -8,12 +8,12 @@ require (
 	github.com/antchfx/xmlquery v1.3.14 // indirect
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/gofiber/fiber/v2 v2.41.0
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/montanaflynn/stats v0.7.0 // indirect
-	github.com/onsi/ginkgo/v2 v2.8.0
-	github.com/onsi/gomega v1.25.0
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
 	github.com/sirupsen/logrus v1.8.2
