@@ -63,7 +63,8 @@ func main() {
 		Setup: &setup,
 	}
 
-	app.Route("/", v1.Routes(app, cfg), "main")
+	// Add all the handler for API v1
+	v1.Routes(app, cfg)
 
 	if err := app.Listen(":3000"); err != nil {
 		log.Fatal(err)
