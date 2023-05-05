@@ -3,7 +3,7 @@ package database_test
 import (
 	"strconv"
 
-	"github.com/jackgris/goscrapy/database"
+	"github.com/jackgris/goscrapy/business/database"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.mongodb.org/mongo-driver/bson/primitive"

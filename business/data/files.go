@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jackgris/goscrapy/database"
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/sirupsen/logrus"
 	"github.com/xuri/excelize/v2"
 )

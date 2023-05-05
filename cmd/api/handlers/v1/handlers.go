@@ -6,9 +6,9 @@ import (
 	"sync"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackgris/goscrapy/business/data"
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/jackgris/goscrapy/config"
-	"github.com/jackgris/goscrapy/data"
-	"github.com/jackgris/goscrapy/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -202,7 +202,7 @@ func ComparePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
 
 	fn := func(c *fiber.Ctx) error {
 		name := c.Params("wholesaler")
-		products := data.ReadCSV("./data/csv/"+name+".csv", cfg.Log)
+		products := data.ReadCSV("./business/data/csv/"+name+".csv", cfg.Log)
 		var result []PriceCompared
 		for _, p := range products {
 			r := cfg.Db.SearchByName(p)
@@ -251,7 +251,7 @@ func NeedUpdatePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
 			percentage -= num
 		}
 
-		products := data.ReadCSV("./data/csv/"+name+".csv", cfg.Log)
+		products := data.ReadCSV("./business/data/csv/"+name+".csv", cfg.Log)
 		var result []PriceCompared
 		for _, p := range products {
 			r := cfg.Db.SearchByName(p)

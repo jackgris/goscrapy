@@ -8,9 +8,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/jackgris/goscrapy/business/database"
 	v1 "github.com/jackgris/goscrapy/cmd/api/handlers/v1"
 	"github.com/jackgris/goscrapy/config"
-	"github.com/jackgris/goscrapy/database"
 	logs "github.com/jackgris/goscrapy/foundation/logger"
 )
 

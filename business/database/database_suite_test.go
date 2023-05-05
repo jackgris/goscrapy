@@ -3,11 +3,11 @@ package database_test
 import (
 	"testing"
 
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/jackgris/goscrapy/config"
-	"github.com/jackgris/goscrapy/database"
+	"github.com/jackgris/goscrapy/foundation/logger"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/sirupsen/logrus"
 )
 
 func TestGoscrapy(t *testing.T) {
@@ -17,14 +17,7 @@ func TestGoscrapy(t *testing.T) {
 
 var _ = BeforeSuite(func() {
 
-	log := logrus.New()
-	log.SetLevel(logrus.WarnLevel)
-	log.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp:          true,
-		TimestampFormat:        "2006-01-02 15:04:05",
-		ForceColors:            true,
-		DisableLevelTruncation: true,
-	})
+	log := logger.New()
 
 	// Getting all config needed for connections and pages login
 	setup := config.Get("../data.env", log)

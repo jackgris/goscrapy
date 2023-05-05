@@ -3,7 +3,7 @@ package data
 import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
-	"github.com/jackgris/goscrapy/database"
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/sirupsen/logrus"
 
 	"encoding/json"

@@ -3,7 +3,7 @@ package config
 import (
 	"os"
 
-	"github.com/jackgris/goscrapy/database"
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
@@ -70,7 +70,7 @@ func GetWholesalersData(config Data, log *logrus.Logger) database.Wholesalers {
 }
 
 func getNameFilesConfig(log *logrus.Logger) []string {
-	entries, err := os.ReadDir("data/csv")
+	entries, err := os.ReadDir("business/data/csv")
 	if err != nil {
 		log.Fatalf("Can't files from config folder %s", err)
 	}

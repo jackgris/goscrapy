@@ -2,8 +2,8 @@ package v1
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackgris/goscrapy/business/database"
 	"github.com/jackgris/goscrapy/config"
-	"github.com/jackgris/goscrapy/database"
 	"github.com/sirupsen/logrus"
 )
 
