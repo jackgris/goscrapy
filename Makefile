@@ -12,3 +12,6 @@ run:	build
 clean:
 	go clean
 	rm ${BINARY_NAME}
+
+test:
+	go test -v ./...
