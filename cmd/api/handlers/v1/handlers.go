@@ -18,7 +18,7 @@ func Home(c *fiber.Ctx) error {
 	return c.JSON(r)
 }
 
-func GetProductById(cfg Config) func(c *fiber.Ctx) error {
+func GetProductById(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 
@@ -37,7 +37,7 @@ func GetProductById(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func GetProductsByWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func GetProductsByWholesaler(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		name := c.Params("wholesaler")
@@ -48,7 +48,7 @@ func GetProductsByWholesaler(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func GetAllProducts(cfg Config) func(c *fiber.Ctx) error {
+func GetAllProducts(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		products := cfg.Db.GetAllProducts()
@@ -58,7 +58,7 @@ func GetAllProducts(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func Scraper(cfg Config) func(c *fiber.Ctx) error {
+func Scraper(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		// Get all the wholesalers save in database.
@@ -93,7 +93,7 @@ func Scraper(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func SaveWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func SaveWholesaler(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		var ws database.Wholesalers
@@ -117,7 +117,7 @@ func SaveWholesaler(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func GetWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func GetWholesaler(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		var wholesaler database.Wholesalers
@@ -135,7 +135,7 @@ func GetWholesaler(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func GetWholesalers(cfg Config) func(c *fiber.Ctx) error {
+func GetWholesalers(cfg Config) fiber.Handler {
 	fn := func(c *fiber.Ctx) error {
 		wholesalers := cfg.Db.FindWholesalers()
 		return c.JSON(wholesalers)
@@ -143,7 +143,7 @@ func GetWholesalers(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func UpdateWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func UpdateWholesaler(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 
@@ -175,7 +175,7 @@ func checkWSaler(ws database.Wholesalers) (ok bool) {
 	return ok
 }
 
-func ShowSameProducts(cfg Config) func(c *fiber.Ctx) error {
+func ShowSameProducts(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		// Get all products saved in our database.
@@ -198,7 +198,7 @@ func ShowSameProducts(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func ComparePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func ComparePricesSameWholesaler(cfg Config) fiber.Handler {
 
 	fn := func(c *fiber.Ctx) error {
 		name := c.Params("wholesaler")
@@ -237,7 +237,7 @@ func ComparePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func NeedUpdatePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
+func NeedUpdatePricesSameWholesaler(cfg Config) fiber.Handler {
 	fn := func(c *fiber.Ctx) error {
 
 		name := c.Params("wholesaler")
@@ -286,7 +286,7 @@ func NeedUpdatePricesSameWholesaler(cfg Config) func(c *fiber.Ctx) error {
 	return fn
 }
 
-func CreateXlsxFile(cfg Config) func(c *fiber.Ctx) error {
+func CreateXlsxFile(cfg Config) fiber.Handler {
 	fn := func(c *fiber.Ctx) error {
 		products := cfg.Db.GetAllProducts()
 		path := data.WriteXlsx(".", cfg.Log, products)
