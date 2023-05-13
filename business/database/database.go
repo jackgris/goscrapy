@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -32,6 +33,20 @@ var (
 	once sync.Once
 	Db   *MongoDb
 )
+
+// Ping sends a ping command to verify that the client can connect to the deployment.
+func (db *MongoDb) Ping() error {
+	return db.client.Ping(db.ctx, nil)
+}
+
+// Restore will restore a backup of a collection to the database
+func (db *MongoDb) Restore(dbname, filename string) error {
+	result := db.client.Database(dbname).RunCommand(db.ctx,
+		bson.M{"restore": bson.M{"file": filename}})
+
+	return result.Err()
+
+}
 
 // Connecting to the database, only one instance will be create, to connect with mongo database, we need
 // the URI where are the DB, the user name and password, and will return the instance with an active connection

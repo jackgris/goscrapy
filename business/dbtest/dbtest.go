@@ -54,10 +54,11 @@ func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.Mongo
 	log := logger.New()
 	// Getting all config needed for connections and pages login
 	setup := config.Get("data.env", log)
+	dbname := "mayorista2"
 
 	// Starting DB connection
 	db, err := database.Connect(setup.Dburi, setup.Dbuser,
-		setup.Dbpass, "mayorista2", log)
+		setup.Dbpass, dbname, log)
 
 	if err != nil {
 		t.Fatalf("Opening database connection: %v", err)
@@ -65,12 +66,20 @@ func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.Mongo
 
 	t.Log("Waiting for database to be ready ...")
 
-	// TODO do some checks for example ping database
+	// Use the MongoClient instance to connect to the Mongo database.
+	err = db.Ping()
+	if err != nil {
+		t.Fatalf("Can't connect to the database: %s", err)
+	}
 
 	t.Log("Database ready")
 	t.Log("Migrate and seed database ...")
 
-	// TODO migrate data
+	// Migrate data from a previous backup
+	err = db.Restore(dbname, "productos.bson")
+	if err != nil {
+		t.Fatalf("Error while restoring backup: %s", err)
+	}
 
 	t.Log("Ready for testing ...")
 
