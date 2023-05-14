@@ -1,4 +1,4 @@
-package dbtest_test
+package dbtest
 
 import (
 	"fmt"
@@ -23,6 +23,7 @@ func StartDB() (*docker.Container, error) {
 	image := "mongo:6.0.5"
 	port := "27017"
 	args := []string{
+		"--name", "goscrapy-mongodb-test",
 		"-e", "MONGO_INITDB_DATABASE=admin",
 		"-e", "MONGODB_INITDB_ROOT_USERNAME=admin",
 		"-e", "MONGODB_INITDB_ROOT_PASSWORD=admin",
@@ -52,8 +53,13 @@ func StopDB(c *docker.Container) {
 func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.MongoDb, func()) {
 
 	log := logger.New()
-	// Getting all config needed for connections and pages login
-	setup := config.Get("data.env", log)
+
+	setup := config.Data{
+		Dburi:  "mongodb://" + c.Host,
+		Dbuser: "admin",
+		Dbpass: "admin",
+	}
+
 	dbname := "mayorista2"
 
 	// Starting DB connection

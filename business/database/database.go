@@ -48,7 +48,7 @@ func (db *MongoDb) Restore(dbname, filename string) error {
 
 }
 
-// Connecting to the database, only one instance will be create, to connect with mongo database, we need
+// Connect give you a connection to the database, only one instance will be create, to connect with mongo database, we need
 // the URI where are the DB, the user name and password, and will return the instance with an active connection
 // or an error
 func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, error) {
@@ -61,8 +61,33 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 		Db.cancel = cancel
 		Db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
-		credentials := options.Credential{Username: dbuser, Password: dbpass}
+		credentials := options.Credential{Username: dbuser, Password: dbpass, PasswordSet: true}
 		option.SetAuth(credentials)
+
+		Db.client, err = mongo.Connect(Db.ctx, option)
+		if err != nil {
+			log.Panicf("Can't connect with db: %s", err.Error())
+		}
+		err = Db.client.Ping(Db.ctx, readpref.Primary())
+
+	})
+
+	Db.name = name
+
+	return Db, err
+}
+
+// ConnectTest do the same that Connect, but without authentication, only for test porpouse
+func ConnectTest(dburi, name string, log *logrus.Logger) (*MongoDb, error) {
+
+	var err error
+	once.Do(func() {
+		Db = new(MongoDb)
+		Db.Log = log
+		ctx, cancel := context.WithCancel(context.Background())
+		Db.cancel = cancel
+		Db.ctx = ctx
+		option := options.Client().ApplyURI(dburi)
 
 		Db.client, err = mongo.Connect(Db.ctx, option)
 		if err != nil {
