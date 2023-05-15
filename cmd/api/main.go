@@ -20,9 +20,9 @@ func main() {
 	// Getting all config needed for connections and pages login
 	setup := config.Get("data.env", log)
 
+	credentials := database.Credentials{User: setup.Dbuser, Password: setup.Dbpass}
 	// Starting DB connection
-	db, err := database.Connect(setup.Dburi, setup.Dbuser,
-		setup.Dbpass, "mayorista", log)
+	db, err := database.Connect(setup.Dburi, "mayorista", log, credentials)
 
 	if err != nil {
 		panic("Error database connection: " + err.Error())

@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 	}
 
 	// Starting DB connection
-	db, err := database.ConnectTest(setup.Dburi, "mayorista2", log)
+	db, err := database.Connect(setup.Dburi, "mayorista2", log)
 	if err != nil {
 		panic("Error database connection: " + err.Error())
 	}

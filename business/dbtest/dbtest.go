@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/jackgris/goscrapy/business/database"
-	"github.com/jackgris/goscrapy/config"
 	"github.com/jackgris/goscrapy/foundation/docker"
 	"github.com/jackgris/goscrapy/foundation/logger"
 	"github.com/sirupsen/logrus"
@@ -54,17 +53,11 @@ func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.Mongo
 
 	log := logger.New()
 
-	setup := config.Data{
-		Dburi:  "mongodb://" + c.Host,
-		Dbuser: "admin",
-		Dbpass: "admin",
-	}
-
+	dburi := "mongodb://" + c.Host
 	dbname := "mayorista2"
 
 	// Starting DB connection
-	db, err := database.Connect(setup.Dburi, setup.Dbuser,
-		setup.Dbpass, dbname, log)
+	db, err := database.Connect(dburi, dbname, log)
 
 	if err != nil {
 		t.Fatalf("Opening database connection: %v", err)
