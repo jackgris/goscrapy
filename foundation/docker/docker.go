@@ -22,7 +22,6 @@ func StartContainer(image string, port string, args ...string) (*Container, erro
 	arg := []string{"run", "-d", "-p", port + ":" + port}
 	arg = append(arg, args...)
 	arg = append(arg, image)
-	fmt.Println("StartContainer args: ", arg)
 	cmd := exec.Command("docker", arg...)
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -32,7 +31,6 @@ func StartContainer(image string, port string, args ...string) (*Container, erro
 
 	id := out.String()[:12]
 	hostIP, hostPort, err := extractIPPort(id, port)
-	fmt.Println("StartContainer: hostIP - " + hostIP + " hostPort - " + hostPort)
 	if err != nil {
 		_ = StopContainer(id)
 		return nil, fmt.Errorf("could not extract ip/port: %w", err)
