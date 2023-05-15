@@ -48,11 +48,29 @@ func (db *MongoDb) Restore(dbname, filename string) error {
 
 }
 
+type Credentials struct {
+	User     string
+	Password string
+	DbName   string
+}
+
+func loadCredentials(credentials ...Credentials) Credentials {
+	credential := Credentials{}
+
+	for _, c := range credentials {
+		credential.User = c.User
+		credential.Password = c.Password
+		credential.DbName = c.DbName
+	}
+	return credential
+}
+
 // Connect give you a connection to the database, only one instance will be create, to connect with mongo database, we need
 // the URI where are the DB, the user name and password, and will return the instance with an active connection
 // or an error
-func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, error) {
+func Connect(dburi, name string, log *logrus.Logger, credentials ...Credentials) (*MongoDb, error) {
 
+	cred := loadCredentials(credentials...)
 	var err error
 	once.Do(func() {
 		Db = new(MongoDb)
@@ -61,33 +79,11 @@ func Connect(dburi, dbuser, dbpass, name string, log *logrus.Logger) (*MongoDb, 
 		Db.cancel = cancel
 		Db.ctx = ctx
 		option := options.Client().ApplyURI(dburi)
-		credentials := options.Credential{Username: dbuser, Password: dbpass, PasswordSet: true}
-		option.SetAuth(credentials)
 
-		Db.client, err = mongo.Connect(Db.ctx, option)
-		if err != nil {
-			log.Panicf("Can't connect with db: %s", err.Error())
+		if cred.User != "" {
+			credentials := options.Credential{Username: cred.User, Password: cred.Password, PasswordSet: true}
+			option.SetAuth(credentials)
 		}
-		err = Db.client.Ping(Db.ctx, readpref.Primary())
-
-	})
-
-	Db.name = name
-
-	return Db, err
-}
-
-// ConnectTest do the same that Connect, but without authentication, only for test porpouse
-func ConnectTest(dburi, name string, log *logrus.Logger) (*MongoDb, error) {
-
-	var err error
-	once.Do(func() {
-		Db = new(MongoDb)
-		Db.Log = log
-		ctx, cancel := context.WithCancel(context.Background())
-		Db.cancel = cancel
-		Db.ctx = ctx
-		option := options.Client().ApplyURI(dburi)
 
 		Db.client, err = mongo.Connect(Db.ctx, option)
 		if err != nil {
