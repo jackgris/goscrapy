@@ -22,10 +22,11 @@ func StartDB() (*docker.Container, error) {
 	image := "mongo:6.0.5"
 	port := "27017"
 	args := []string{
-		"--name", "goscrapy-mongodb-test",
-		"-e", "MONGO_INITDB_DATABASE=admin",
-		"-e", "MONGODB_INITDB_ROOT_USERNAME=admin",
-		"-e", "MONGODB_INITDB_ROOT_PASSWORD=admin",
+		// This are examples of flags you can add to run the database
+		// "--name", "goscrapy-mongodb-test",
+		// "-e", "MONGO_INITDB_DATABASE=admin",
+		// "-e", "MONGODB_INITDB_ROOT_USERNAME=admin",
+		// "-e", "MONGODB_INITDB_ROOT_PASSWORD=admin",
 	}
 
 	c, err := docker.StartContainer(image, port, args...)
@@ -54,7 +55,7 @@ func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.Mongo
 	log := logger.New()
 
 	dburi := "mongodb://" + c.Host
-	dbname := "mayorista2"
+	dbname := "mayorista"
 
 	// Starting DB connection
 	db, err := database.Connect(dburi, dbname, log)
@@ -75,7 +76,7 @@ func NewUnit(t *testing.T, c *docker.Container) (*logrus.Logger, *database.Mongo
 	t.Log("Migrate and seed database ...")
 
 	// Migrate data from a previous backup
-	err = db.Restore(dbname, "productos.bson")
+	err = docker.Restore(c.ID, dbname)
 	if err != nil {
 		t.Fatalf("Error while restoring backup: %s", err)
 	}

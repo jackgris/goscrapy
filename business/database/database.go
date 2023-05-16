@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -37,15 +36,6 @@ var (
 // Ping sends a ping command to verify that the client can connect to the deployment.
 func (db *MongoDb) Ping() error {
 	return db.client.Ping(db.ctx, nil)
-}
-
-// Restore will restore a backup of a collection to the database
-func (db *MongoDb) Restore(dbname, filename string) error {
-	result := db.client.Database(dbname).RunCommand(db.ctx,
-		bson.M{"restore": bson.M{"file": filename}})
-
-	return result.Err()
-
 }
 
 type Credentials struct {
