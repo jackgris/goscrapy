@@ -57,6 +57,25 @@ func StopContainer(id string) error {
 	return nil
 }
 
+// Restore will restore a backup of a collection to the database
+func Restore(container, dbname string) error {
+
+	// Example original command: docker cp dump 23b44ac95253:/
+	cmd := exec.Command("docker", "cp", "dump", container+":/")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("Error while copy dump to container: %s", err)
+	}
+
+	// Example original command:
+	// docker exec "container" mongorestore --db mayorista2 dump/mayorista --drop
+	cmd = exec.Command("docker", "exec", container,
+		"mongorestore", "--db", dbname, "dump/"+dbname, "--drop")
+	_, err = cmd.CombinedOutput()
+
+	return err
+}
+
 // DumpContainerLogs outputs logs from the running docker container.
 func DumpContainerLogs(id string) []byte {
 	out, err := exec.Command("docker", "logs", id).CombinedOutput()
